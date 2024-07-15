@@ -107,6 +107,93 @@ public class RegistrationTests {
                 );
 
     }
+    @Test
+
+    void whenVisitorEnterGenderAndRegistersSuccessfully_thenReturn201AndResponseBody() {
+
+        given()
+
+                .body("""
+
+                {
+
+                    "firstName": "Vil",
+
+                    "lastName": "Testu",
+
+                    "country": "Lithuania",
+
+                    "password": "Testas123*",
+
+                    "displayName": "Jukavai",
+
+                    "roles": [
+
+                        {
+
+                            "id": 1
+
+                        }
+
+                    ],
+
+                    "dateOfBirth": "1903-01-01",
+                    "gender": "Female",
+
+                    "email": "jukavai@testas.lt"
+
+                }
+
+                """)
+
+                .contentType(ContentType.JSON)
+                .when()
+                .request("POST", "/register")
+                .then()
+                .assertThat()
+                .statusCode(201)
+                .body(
+                        "id",
+                        not(equalTo(0)),
+                        "firstName",
+                        equalTo("Vil"),
+                        "lastName",
+                        equalTo("Testu"),
+                        "country",
+                        equalTo("Lithuania"),
+                        "password",
+                        not(equalTo("Testas123*")),
+                        "displayName",
+                        equalTo("Jukavai"),
+                        "roles",
+                        hasSize(1),
+                        "roles[0].id",
+                        equalTo(1),
+                        "authorities",
+                        hasSize(1),
+                        "authorities[0].id",
+                        equalTo(1),
+                        "dateOfBirth",
+                        equalTo("1903-01-01"),
+                        "gender",
+                        equalTo("Female"),
+                        "username",
+                        equalTo("jukavai@testas.lt"),
+                        "email",
+                        equalTo("jukavai@testas.lt"),
+                        "enabled",
+                        equalTo(true),
+                        "accountNonLocked",
+                        equalTo(true),
+                        "accountNonExpired",
+                        equalTo(true),
+                        "credentialsNonExpired",
+                        equalTo(true)
+
+
+                );
+
+    }
     @BeforeEach
     void cleanUpDatabase() throws SQLException {
         Connection connection = DriverManager.getConnection(
