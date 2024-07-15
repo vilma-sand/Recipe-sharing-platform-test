@@ -60,15 +60,10 @@ public class RegistrationTests {
                 """)
 
                 .contentType(ContentType.JSON)
-
                 .when()
-
                 .request("POST", "/register")
-
                 .then()
-
                 .assertThat()
-
                 .statusCode(201)
                 .body(
                         "id",
@@ -83,14 +78,18 @@ public class RegistrationTests {
                         not(equalTo("Testas123*")),
                         "displayName",
                         equalTo("Jukava"),
-                        "roles.id",
-                        contains(1),
-                        "authorities.id",
-                        contains(1),
+                        "roles",
+                        hasSize(1),
+                        "roles[0].id",
+                        equalTo(1),
+                        "authorities",
+                        hasSize(1),
+                        "authorities[0].id",
+                        equalTo(1),
                         "dateOfBirth",
                         equalTo("1903-01-01"),
                         "gender",
-                        equalTo(null),
+                        nullValue(),
                         "username",
                         equalTo("jukava@testas.lt"),
                         "email",
