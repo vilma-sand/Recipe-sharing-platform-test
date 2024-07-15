@@ -17,6 +17,7 @@ import java.util.Collections;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
 
 public class RegistrationTests {
 
@@ -82,12 +83,27 @@ public class RegistrationTests {
                         not(equalTo("Testas123*")),
                         "displayName",
                         equalTo("Jukava"),
-                        "roles",
-                        equalTo(Arrays.asList(Collections.singletonMap("id", 1))),
+                        "roles.id",
+                        contains(1),
+                        "authorities.id",
+                        contains(1),
                         "dateOfBirth",
                         equalTo("1903-01-01"),
+                        "gender",
+                        equalTo(null),
+                        "username",
+                        equalTo("jukava@testas.lt"),
                         "email",
-                        equalTo("jukava@testas.lt")
+                        equalTo("jukava@testas.lt"),
+                        "enabled",
+                        equalTo(true),
+                        "accountNonLocked",
+                        equalTo(true),
+                        "accountNonExpired",
+                        equalTo(true),
+                        "credentialsNonExpired",
+                        equalTo(true)
+
 
                 );
 
