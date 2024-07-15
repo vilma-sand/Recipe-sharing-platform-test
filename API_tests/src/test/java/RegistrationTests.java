@@ -3,6 +3,7 @@ import io.restassured.RestAssured;
 
 import io.restassured.http.ContentType;
 
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,8 +12,11 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.Collections;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.*;
 
 public class RegistrationTests {
 
@@ -28,13 +32,13 @@ public class RegistrationTests {
 
                     "firstName": "Testas",
 
-                    "lastName": "Testas",
+                    "lastName": "Testukaitis",
 
                     "country": "Lithuania",
 
-                    "password": "Testas1*",
+                    "password": "Testas123*",
 
-                    "displayName": "Tesstukaa",
+                    "displayName": "Jukava",
 
                     "roles": [
 
@@ -48,7 +52,7 @@ public class RegistrationTests {
 
                     "dateOfBirth": "1903-01-01",
 
-                    "email": "testas3354@testas.lt"
+                    "email": "jukava@testas.lt"
 
                 }
 
@@ -64,7 +68,28 @@ public class RegistrationTests {
 
                 .assertThat()
 
-                .statusCode(201);
+                .statusCode(201)
+                .body(
+                        "id",
+                        not(equalTo(0)),
+                        "firstName",
+                        equalTo("Testas"),
+                        "lastName",
+                        equalTo("Testukaitis"),
+                        "country",
+                        equalTo("Lithuania"),
+                        "password",
+                        not(equalTo("Testas123*")),
+                        "displayName",
+                        equalTo("Jukava"),
+                        "roles",
+                        equalTo(Arrays.asList(Collections.singletonMap("id", 1))),
+                        "dateOfBirth",
+                        equalTo("1903-01-01"),
+                        "email",
+                        equalTo("jukava@testas.lt")
+
+                );
 
     }
     @BeforeEach
