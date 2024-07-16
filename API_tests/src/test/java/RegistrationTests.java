@@ -506,7 +506,7 @@ public class RegistrationTests {
     }
 
     @Test
-    void whenFieldLastNameDeleted_theReturn400AndResponseBody() {
+    void whenFieldLastNameDoesNotExist_theReturn400AndResponseBody() {
 
         given().body(
                         """
