@@ -1,64 +1,38 @@
-
-import io.restassured.RestAssured;
-
 import io.restassured.http.ContentType;
-
-import org.hamcrest.Matchers;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.Collections;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
-import static org.hamcrest.Matchers.equalTo;
 
 public class RegistrationTests {
 
     @Test
-
     void whenVisitorRegistersSuccessfully_thenReturn201AndResponseBody() {
-
-        given()
-
-                .body("""
-
+        given().body(
+                        """
                 {
-
                     "firstName": "Testas",
-
                     "lastName": "Testukaitis",
-
                     "country": "Lithuania",
-
                     "password": "Testas123*",
-
                     "displayName": "Jukava",
-
                     "roles": [
-
                         {
-
                             "id": 1
-
                         }
-
                     ],
-
                     "dateOfBirth": "1903-01-01",
-
                     "email": "jukava@testas.lt"
-
                 }
-
                 """)
-
                 .contentType(ContentType.JSON)
                 .when()
                 .request("POST", "/register")
@@ -101,51 +75,30 @@ public class RegistrationTests {
                         "accountNonExpired",
                         equalTo(true),
                         "credentialsNonExpired",
-                        equalTo(true)
-
-
-                );
-
+                        equalTo(true));
     }
+
     @Test
-
-    void whenVisitorEnterGenderAndRegistersSuccessfully_thenReturn201AndResponseBody() {
-
-        given()
-
-                .body("""
-
+    void whenVisitorEntersGenderAndRegistersSuccessfully_thenReturn201AndResponseBody() {
+        given().body(
+                        """
                 {
-
                     "firstName": "Vil",
-
                     "lastName": "Testu",
-
                     "country": "Lithuania",
-
                     "password": "Testas123*",
-
                     "displayName": "Jukavai",
-
                     "roles": [
-
                         {
-
                             "id": 1
-
                         }
-
                     ],
-
                     "dateOfBirth": "1903-01-01",
                     "gender": "Female",
-
                     "email": "jukavai@testas.lt"
-
                 }
 
                 """)
-
                 .contentType(ContentType.JSON)
                 .when()
                 .request("POST", "/register")
@@ -188,16 +141,79 @@ public class RegistrationTests {
                         "accountNonExpired",
                         equalTo(true),
                         "credentialsNonExpired",
-                        equalTo(true)
-
-
-                );
-
+                        equalTo(true));
     }
+
+    @ParameterizedTest
+    @CsvFileSource(resources = "/validGenders.csv")
+    void whenVisitorChoosesGenderAndRegistersSuccessfully_thenReturn201AndResponseBody(String input) {
+
+        given().body(
+                        """
+                {
+                    "firstName": "Vardenis",
+                    "lastName": "Pavardenis",
+                    "country": "Lithuania",
+                    "password": "Testas1*",
+                    "displayName": "Mokytojas",
+                    "roles": [
+                        {"id": 1}
+                    ],
+                    "dateOfBirth": "1900-01-01",
+                    "email": "vardens.pavardenis@techin.lt",
+                    "gender": "%s"
+                }
+                """
+                                .formatted(input))
+                .contentType(ContentType.JSON)
+                .when()
+                .request("POST", "/register")
+                .then()
+                .assertThat()
+                .statusCode(201)
+                .body(
+                        "id",
+                        not(equalTo(0)),
+                        "firstName",
+                        equalTo("Vardenis"),
+                        "lastName",
+                        equalTo("Pavardenis"),
+                        "displayName",
+                        equalTo("Mokytojas"),
+                        "email",
+                        equalTo("vardens.pavardenis@techin.lt"),
+                        "password",
+                        not(equalTo("Testas1*")),
+                        "dateOfBirth",
+                        equalTo("1900-01-01"),
+                        "gender",
+                        equalTo(input),
+                        "country",
+                        equalTo("Lithuania"),
+                        "roles",
+                        hasSize(1),
+                        "roles[0].id",
+                        equalTo(1),
+                        "authorities",
+                        hasSize(1),
+                        "authorities[0].id",
+                        equalTo(1),
+                        "username",
+                        equalTo("vardens.pavardenis@techin.lt"),
+                        "accountNonLocked",
+                        equalTo(true),
+                        "accountNonExpired",
+                        equalTo(true),
+                        "credentialsNonExpired",
+                        equalTo(true),
+                        "enabled",
+                        equalTo(true));
+    }
+
     @BeforeEach
     void cleanUpDatabase() throws SQLException {
-        Connection connection = DriverManager.getConnection(
-                "jdbc:h2:tcp://localhost/~/recipe-sharing-platform/backend/rsp", "sa", "");
+        Connection connection =
+                DriverManager.getConnection("jdbc:h2:tcp://localhost/~/recipe-sharing-platform/backend/rsp", "sa", "");
         String deleteQuery = "DELETE FROM users_roles; DELETE FROM users;";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(deleteQuery)) {
@@ -207,6 +223,3 @@ public class RegistrationTests {
         }
     }
 }
-
-
-
