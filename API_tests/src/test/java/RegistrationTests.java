@@ -727,7 +727,7 @@ public class RegistrationTests {
     }
 
     @Test
-    void whenVisitorEntersInvalidFormatDisplayName_theReturn400AndResponseBody() {
+    void whenVisitorEntersDisplayNameWithSpecialSymbol_theReturn400AndResponseBody() {
 
         given().body(
                         """
@@ -735,8 +735,8 @@ public class RegistrationTests {
                     "firstName": "Testas",
                     "lastName": "Testukaitis",
                     "country": "Lithuania",
-                    "password": "Testu",
-                    "displayName": "Jukava  kkkkk",
+                    "password": "Testukas123*",
+                    "displayName": "J3*",
                     "roles": [
                         {
                             "id": 1
@@ -753,6 +753,8 @@ public class RegistrationTests {
                 .assertThat()
                 .statusCode(400)
                 .body(
+                        "size()",
+                        is(1),
                         "displayName",
                         equalTo(
                                 "You can only enter letters or numbers. At least 1 character long. Cannot begin or end with a space. No more than one space between words"));
