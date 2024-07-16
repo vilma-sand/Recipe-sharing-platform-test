@@ -920,7 +920,7 @@ public class RegistrationTests {
     }
 
     @Test
-    void whenVisitorEntersTodayDateOfBirth_theReturn400AndResponseBody() {
+    void whenVisitorEntersLaterThan1900DateOfBirth_theReturn400AndResponseBody() {
 
         given().body(
                         """
@@ -935,7 +935,7 @@ public class RegistrationTests {
                             "id": 1
                         }
                     ],
-                    "dateOfBirth": "2024-07-16",
+                    "dateOfBirth": "1800-07-16",
                     "email": "jukava@testas.lt"
                 }
                 """)
