@@ -858,7 +858,7 @@ public class RegistrationTests {
     }
 
     @Test
-    void whenDisplayNameDoesNotExist_theReturn400AndResponseBody() {
+    void whenDisplayNameFieldDoesNotExist_theReturn400AndResponseBody() {
 
         given().body(
                         """
@@ -917,6 +917,39 @@ public class RegistrationTests {
                         "displayName",
                         equalTo(
                                 "You can only enter letters or numbers. At least 1 character long. Cannot begin or end with a space. No more than one space between words"));
+    }
+
+    @Test
+    void whenVisitorEntersTodayDateOfBirth_theReturn400AndResponseBody() {
+
+        given().body(
+                        """
+                {
+                    "firstName": "Testas",
+                    "lastName": "Testukaitis",
+                    "country": "Lithuania",
+                    "password": "Testukas123*",
+                    "displayName": "J3",
+                    "roles": [
+                        {
+                            "id": 1
+                        }
+                    ],
+                    "dateOfBirth": "2024-07-16",
+                    "email": "jukava@testas.lt"
+                }
+                """)
+                .contentType(ContentType.JSON)
+                .when()
+                .request("POST", "/register")
+                .then()
+                .assertThat()
+                .statusCode(400)
+                .body(
+                        "size()",
+                        is(1),
+                        "dateOfBirth",
+                        equalTo("Cannot be older than the year 1900, or younger than 13 years old"));
     }
 
     @BeforeEach
