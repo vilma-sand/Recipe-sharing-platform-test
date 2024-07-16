@@ -534,7 +534,7 @@ public class RegistrationTests {
     }
 
     @Test
-    void whenVisitorEntersInvalidFormatPassword_theReturn400AndResponseBody() {
+    void whenVisitorEntersPasswordWithoutNumber_theReturn400AndResponseBody() {
 
         given().body(
                         """
@@ -542,7 +542,7 @@ public class RegistrationTests {
                     "firstName": "Testas",
                     "lastName": "Testukaitis",
                     "country": "Lithuania",
-                    "password": "Testu",
+                    "password": "Testukas*",
                     "displayName": "Jukava",
                     "roles": [
                         {
@@ -560,6 +560,8 @@ public class RegistrationTests {
                 .assertThat()
                 .statusCode(400)
                 .body(
+                        "size()",
+                        is(1),
                         "password",
                         equalTo(
                                 "Must contain at least one uppercase letter, one lowercase letter, one number, and any one of these special symbols: !@#$%^&*"));
