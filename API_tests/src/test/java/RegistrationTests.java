@@ -636,6 +636,40 @@ public class RegistrationTests {
     }
 
     @Test
+    void whenVisitorEntersPasswordWithoutSpecialSymbols_theReturn400AndResponseBody() {
+
+        given().body(
+                        """
+                {
+                    "firstName": "Testas",
+                    "lastName": "Testukaitis",
+                    "country": "Lithuania",
+                    "password": "Testukas3",
+                    "displayName": "Jukava",
+                    "roles": [
+                        {
+                            "id": 1
+                        }
+                    ],
+                    "dateOfBirth": "1903-01-01",
+                    "email": "jukava@testas.lt"
+                }
+                """)
+                .contentType(ContentType.JSON)
+                .when()
+                .request("POST", "/register")
+                .then()
+                .assertThat()
+                .statusCode(400)
+                .body(
+                        "size()",
+                        is(1),
+                        "password",
+                        equalTo(
+                                "Must contain at least one uppercase letter, one lowercase letter, one number, and any one of these special symbols: !@#$%^&*"));
+    }
+
+    @Test
     void whenVisitorEntersInvalidFormatDisplayName_theReturn400AndResponseBody() {
 
         given().body(
