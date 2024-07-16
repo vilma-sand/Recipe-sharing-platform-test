@@ -278,10 +278,110 @@ public class RegistrationTests {
                 .body("size()", is(1), "firstName", equalTo("Cannot be null or empty"));
     }
 
- 
+    @Test
+    void whenVisitorEntersFirstNameWithNumber_theReturn400AndResponseBody() {
+
+        given().body(
+                        """
+                {
+                    "firstName": "Toma3",
+                    "lastName": "Testukaitis",
+                    "country": "Lithuania",
+                    "password": "Testas123*",
+                    "displayName": "Jukava",
+                    "roles": [
+                        {
+                            "id": 1
+                        }
+                    ],
+                    "dateOfBirth": "1903-01-01",
+                    "email": "jukava@testas.lt"
+                }
+                """)
+                .contentType(ContentType.JSON)
+                .when()
+                .request("POST", "/register")
+                .then()
+                .assertThat()
+                .statusCode(400)
+                .body(
+                        "size()",
+                        is(1),
+                        "firstName",
+                        equalTo(
+                                "You can only enter letters. First letter must be capital. At least 2 characters long"));
+    }
 
     @Test
-    void whenVisitorEntersInvalidFormatLastName_theReturn400AndResponseBody() {
+    void whenVisitorEntersOneLetterFirstName_theReturn400AndResponseBody() {
+
+        given().body(
+                        """
+                {
+                    "firstName": "T",
+                    "lastName": "Testukaitis",
+                    "country": "Lithuania",
+                    "password": "Testas123*",
+                    "displayName": "Jukava",
+                    "roles": [
+                        {
+                            "id": 1
+                        }
+                    ],
+                    "dateOfBirth": "1903-01-01",
+                    "email": "jukava@testas.lt"
+                }
+                """)
+                .contentType(ContentType.JSON)
+                .when()
+                .request("POST", "/register")
+                .then()
+                .assertThat()
+                .statusCode(400)
+                .body(
+                        "size()",
+                        is(1),
+                        "firstName",
+                        equalTo(
+                                "You can only enter letters. First letter must be capital. At least 2 characters long"));
+    }
+
+    @Test
+    void whenVisitorEntersSmallLettersLastName_theReturn400AndResponseBody() {
+
+        given().body(
+                        """
+                {
+                    "firstName": "Testas",
+                    "lastName": "testukaitis",
+                    "country": "Lithuania",
+                    "password": "Testas123*",
+                    "displayName": "Jukava",
+                    "roles": [
+                        {
+                            "id": 1
+                        }
+                    ],
+                    "dateOfBirth": "1903-01-01",
+                    "email": "jukava@testas.lt"
+                }
+                """)
+                .contentType(ContentType.JSON)
+                .when()
+                .request("POST", "/register")
+                .then()
+                .assertThat()
+                .statusCode(400)
+                .body(
+                        "size()",
+                        is(1),
+                        "lastName",
+                        equalTo(
+                                "You can only enter letters. First letter must be capital. At least 2 characters long"));
+    }
+
+    @Test
+    void whenVisitorEntersLastName_theReturn400AndResponseBody() {
 
         given().body(
                         """
