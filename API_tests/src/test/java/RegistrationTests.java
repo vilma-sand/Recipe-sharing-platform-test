@@ -858,6 +858,34 @@ public class RegistrationTests {
     }
 
     @Test
+    void whenDisplayNameDoesNotExist_theReturn400AndResponseBody() {
+
+        given().body(
+                        """
+                {
+                    "firstName": "Testas",
+                    "lastName": "Testukaitis",
+                    "country": "Lithuania",
+                    "password": "Testukas123*",
+                    "roles": [
+                        {
+                            "id": 1
+                        }
+                    ],
+                    "dateOfBirth": "1903-01-01",
+                    "email": "jukava@testas.lt"
+                }
+                """)
+                .contentType(ContentType.JSON)
+                .when()
+                .request("POST", "/register")
+                .then()
+                .assertThat()
+                .statusCode(400)
+                .body("size()", is(1), "displayName", equalTo("Cannot be null or empty"));
+    }
+
+    @Test
     void whenDisplayNameHasMoreThanOneSpaceBetweenWords_theReturn400AndResponseBody() {
 
         given().body(
