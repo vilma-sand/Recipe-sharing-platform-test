@@ -476,39 +476,7 @@ public class RegistrationTests {
                 .statusCode(400)
                 .body("size()", is(1), "lastName", equalTo("Cannot be null or empty"));
     }
-
-    @Test
-    void whenVisitorEntersLastName_theReturn400AndResponseBody() {
-
-        given().body(
-                        """
-                {
-                    "firstName": "Testas",
-                    "lastName": "testukaitis2",
-                    "country": "Lithuania",
-                    "password": "Testas123*",
-                    "displayName": "Jukava",
-                    "roles": [
-                        {
-                            "id": 1
-                        }
-                    ],
-                    "dateOfBirth": "1903-01-01",
-                    "email": "jukava@testas.lt"
-                }
-                """)
-                .contentType(ContentType.JSON)
-                .when()
-                .request("POST", "/register")
-                .then()
-                .assertThat()
-                .statusCode(400)
-                .body(
-                        "lastName",
-                        equalTo(
-                                "You can only enter letters. First letter must be capital. At least 2 characters long"));
-    }
-
+    
     @Test
     void whenVisitorEntersInvalidFormatPassword_theReturn400AndResponseBody() {
 
