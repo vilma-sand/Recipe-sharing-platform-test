@@ -279,6 +279,38 @@ public class RegistrationTests {
                                 "You can only enter letters. First letter must be capital. At least 2 characters long"));
     }
 
+    @Test
+    void whenVisitorEntersInvalidFormatPassword_theReturn400AndResponseBody() {
+
+        given().body(
+                        """
+                {
+                    "firstName": "Testas",
+                    "lastName": "Testukaitis",
+                    "country": "Lithuania",
+                    "password": "Testu",
+                    "displayName": "Jukava",
+                    "roles": [
+                        {
+                            "id": 1
+                        }
+                    ],
+                    "dateOfBirth": "1903-01-01",
+                    "email": "jukava@testas.lt"
+                }
+                """)
+                .contentType(ContentType.JSON)
+                .when()
+                .request("POST", "/register")
+                .then()
+                .assertThat()
+                .statusCode(400)
+                .body(
+                        "password",
+                        equalTo(
+                                "Must contain at least one uppercase letter, one lowercase letter, one number, and any one of these special symbols: !@#$%^&*"));
+    }
+
     @BeforeEach
     void cleanUpDatabase() throws SQLException {
         Connection connection =
