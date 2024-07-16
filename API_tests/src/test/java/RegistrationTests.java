@@ -794,6 +794,40 @@ public class RegistrationTests {
                                 "You can only enter letters or numbers. At least 1 character long. Cannot begin or end with a space. No more than one space between words"));
     }
 
+    @Test
+    void whenDisplayNameEndsWithSpace_theReturn400AndResponseBody() {
+
+        given().body(
+                        """
+                {
+                    "firstName": "Testas",
+                    "lastName": "Testukaitis",
+                    "country": "Lithuania",
+                    "password": "Testukas123*",
+                    "displayName": "J3 ",
+                    "roles": [
+                        {
+                            "id": 1
+                        }
+                    ],
+                    "dateOfBirth": "1903-01-01",
+                    "email": "jukava@testas.lt"
+                }
+                """)
+                .contentType(ContentType.JSON)
+                .when()
+                .request("POST", "/register")
+                .then()
+                .assertThat()
+                .statusCode(400)
+                .body(
+                        "size()",
+                        is(1),
+                        "displayName",
+                        equalTo(
+                                "You can only enter letters or numbers. At least 1 character long. Cannot begin or end with a space. No more than one space between words"));
+    }
+
     @BeforeEach
     void cleanUpDatabase() throws SQLException {
         Connection connection =
