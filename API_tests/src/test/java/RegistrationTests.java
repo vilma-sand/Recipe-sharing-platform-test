@@ -215,6 +215,38 @@ public class RegistrationTests {
                         equalTo(true));
     }
 
+    @Test
+    void whenVisitorEntersInvalidFormatName_theReturn400AndResponseBody() {
+
+        given().body(
+                        """
+                {
+                    "firstName": "testas",
+                    "lastName": "Testukaitis",
+                    "country": "Lithuania",
+                    "password": "Testas123*",
+                    "displayName": "Jukava",
+                    "roles": [
+                        {
+                            "id": 1
+                        }
+                    ],
+                    "dateOfBirth": "1903-01-01",
+                    "email": "jukava@testas.lt"
+                }
+                """)
+                .contentType(ContentType.JSON)
+                .when()
+                .request("POST", "/register")
+                .then()
+                .assertThat()
+                .statusCode(400)
+                .body(
+                        "firstName",
+                        equalTo(
+                                "You can only enter letters. First letter must be capital. At least 2 characters long"));
+    }
+
     @BeforeEach
     void cleanUpDatabase() throws SQLException {
         Connection connection =
