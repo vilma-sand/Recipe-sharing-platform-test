@@ -242,10 +242,43 @@ public class RegistrationTests {
                 .assertThat()
                 .statusCode(400)
                 .body(
+                        "size()",
+                        is(1),
                         "firstName",
                         equalTo(
                                 "You can only enter letters. First letter must be capital. At least 2 characters long"));
     }
+
+    @Test
+    void whenVisitorEntersEmptyFirstName_theReturn400AndResponseBody() {
+
+        given().body(
+                        """
+                {
+                    "firstName": "",
+                    "lastName": "Testukaitis",
+                    "country": "Lithuania",
+                    "password": "Testas123*",
+                    "displayName": "Jukava",
+                    "roles": [
+                        {
+                            "id": 1
+                        }
+                    ],
+                    "dateOfBirth": "1903-01-01",
+                    "email": "jukava@testas.lt"
+                }
+                """)
+                .contentType(ContentType.JSON)
+                .when()
+                .request("POST", "/register")
+                .then()
+                .assertThat()
+                .statusCode(400)
+                .body("size()", is(1), "firstName", equalTo("Cannot be null or empty"));
+    }
+
+ 
 
     @Test
     void whenVisitorEntersInvalidFormatLastName_theReturn400AndResponseBody() {
@@ -309,6 +342,38 @@ public class RegistrationTests {
                         "password",
                         equalTo(
                                 "Must contain at least one uppercase letter, one lowercase letter, one number, and any one of these special symbols: !@#$%^&*"));
+    }
+
+    @Test
+    void whenVisitorEntersInvalidFormatDisplayName_theReturn400AndResponseBody() {
+
+        given().body(
+                        """
+                {
+                    "firstName": "Testas",
+                    "lastName": "Testukaitis",
+                    "country": "Lithuania",
+                    "password": "Testu",
+                    "displayName": "Jukava  kkkkk",
+                    "roles": [
+                        {
+                            "id": 1
+                        }
+                    ],
+                    "dateOfBirth": "1903-01-01",
+                    "email": "jukava@testas.lt"
+                }
+                """)
+                .contentType(ContentType.JSON)
+                .when()
+                .request("POST", "/register")
+                .then()
+                .assertThat()
+                .statusCode(400)
+                .body(
+                        "displayName",
+                        equalTo(
+                                "You can only enter letters or numbers. At least 1 character long. Cannot begin or end with a space. No more than one space between words"));
     }
 
     @BeforeEach
