@@ -78,72 +78,6 @@ public class RegistrationTests {
                         equalTo(true));
     }
 
-    @Test
-    void whenVisitorEntersGenderAndRegistersSuccessfully_thenReturn201AndResponseBody() {
-        given().body(
-                        """
-                {
-                    "firstName": "Vil",
-                    "lastName": "Testu",
-                    "country": "Lithuania",
-                    "password": "Testas123*",
-                    "displayName": "Jukavai",
-                    "roles": [
-                        {
-                            "id": 1
-                        }
-                    ],
-                    "dateOfBirth": "1903-01-01",
-                    "gender": "Female",
-                    "email": "jukavai@testas.lt"
-                }
-
-                """)
-                .contentType(ContentType.JSON)
-                .when()
-                .request("POST", "/register")
-                .then()
-                .assertThat()
-                .statusCode(201)
-                .body(
-                        "id",
-                        not(equalTo(0)),
-                        "firstName",
-                        equalTo("Vil"),
-                        "lastName",
-                        equalTo("Testu"),
-                        "country",
-                        equalTo("Lithuania"),
-                        "password",
-                        not(equalTo("Testas123*")),
-                        "displayName",
-                        equalTo("Jukavai"),
-                        "roles",
-                        hasSize(1),
-                        "roles[0].id",
-                        equalTo(1),
-                        "authorities",
-                        hasSize(1),
-                        "authorities[0].id",
-                        equalTo(1),
-                        "dateOfBirth",
-                        equalTo("1903-01-01"),
-                        "gender",
-                        equalTo("Female"),
-                        "username",
-                        equalTo("jukavai@testas.lt"),
-                        "email",
-                        equalTo("jukavai@testas.lt"),
-                        "enabled",
-                        equalTo(true),
-                        "accountNonLocked",
-                        equalTo(true),
-                        "accountNonExpired",
-                        equalTo(true),
-                        "credentialsNonExpired",
-                        equalTo(true));
-    }
-
     @ParameterizedTest
     @CsvFileSource(resources = "/validGenders.csv")
     void whenVisitorChoosesGenderAndRegistersSuccessfully_thenReturn201AndResponseBody(String input) {
@@ -198,6 +132,77 @@ public class RegistrationTests {
                         hasSize(1),
                         "authorities[0].id",
                         equalTo(1),
+                        "username",
+                        equalTo("vardens.pavardenis@techin.lt"),
+                        "accountNonLocked",
+                        equalTo(true),
+                        "accountNonExpired",
+                        equalTo(true),
+                        "credentialsNonExpired",
+                        equalTo(true),
+                        "enabled",
+                        equalTo(true));
+    }
+
+    @ParameterizedTest
+    @CsvFileSource(resources = "/validGenders.csv")
+    void whenVisitorChoosesGenderAndTwoRolesAndRegistersSuccessfully_thenReturn201AndResponseBody(String input) {
+
+        given().body(
+                        """
+                {
+                    "firstName": "Vardenis",
+                    "lastName": "Pavardenis",
+                    "country": "Lithuania",
+                    "password": "Testas1*",
+                    "displayName": "Mokytojas",
+                    "roles": [
+                        {"id": 1},
+                        {"id": 2}
+                    ],
+                    "dateOfBirth": "1900-01-01",
+                    "email": "vardens.pavardenis@techin.lt",
+                    "gender": "%s"
+                }
+                """
+                                .formatted(input))
+                .contentType(ContentType.JSON)
+                .when()
+                .request("POST", "/register")
+                .then()
+                .assertThat()
+                .statusCode(201)
+                .body(
+                        "id",
+                        not(equalTo(0)),
+                        "firstName",
+                        equalTo("Vardenis"),
+                        "lastName",
+                        equalTo("Pavardenis"),
+                        "displayName",
+                        equalTo("Mokytojas"),
+                        "email",
+                        equalTo("vardens.pavardenis@techin.lt"),
+                        "password",
+                        not(equalTo("Testas1*")),
+                        "dateOfBirth",
+                        equalTo("1900-01-01"),
+                        "gender",
+                        equalTo(input),
+                        "country",
+                        equalTo("Lithuania"),
+                        "roles",
+                        hasSize(2),
+                        "roles[0].id",
+                        equalTo(1),
+                        "roles[1].id",
+                        equalTo(2),
+                        "authorities",
+                        hasSize(2),
+                        "authorities[0].id",
+                        equalTo(1),
+                        "authorities[1].id",
+                        equalTo(2),
                         "username",
                         equalTo("vardens.pavardenis@techin.lt"),
                         "accountNonLocked",
