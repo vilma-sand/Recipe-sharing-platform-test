@@ -321,39 +321,72 @@ public class RegistrationTests {
                 .body("size()", is(1), "gender", equalTo("Must be Female, Male, or Other"));
     }
 
-    //    @Test
-    //    void whenVisitorEntersTwoSameRoles_theReturn400AndResponseBody() {
-    //
-    //        given().body(
-    //                        """
-    //                {
-    //                    "firstName": "testas",
-    //                    "lastName": "Testukaitis",
-    //                    "country": "Lithuania",
-    //                    "password": "Testas123*",
-    //                    "displayName": "Jukava",
-    //                    "roles": [
-    //                        {"id": 1},
-    //                        {"id": 1}
-    //                    ],
-    //                    "dateOfBirth": "1903-01-01",
-    //                    "email": "jukava@testas.lt"
-    //                }
-    //                """)
-    //                .contentType(ContentType.JSON)
-    //                .when()
-    //                .request("POST", "/register")
-    //                .then()
-    //                .assertThat()
-    //                .statusCode(400)
-    //                .body(
-    //                        "size()",
-    //                        is(1),
-    //                        "firstName",
-    //                        equalTo(
-    //                                "You can only enter letters. First letter must be capital. At least 2 characters
-    // long"));
-    //    }
+    @Test
+    void whenVisitorEntersTwoSameRoles_theReturn400AndResponseBody() {
+
+        given().body(
+                        """
+                    {
+                        "firstName": "Testas",
+                        "lastName": "Testukaitis",
+                        "country": "Lithuania",
+                        "password": "Testas123*",
+                        "displayName": "Jukava",
+                        "roles": [
+                            {"id": 1},
+                            {"id": 1}
+                        ],
+                        "dateOfBirth": "1903-01-01",
+                        "gender": null,
+                        "email": "jukava@testas.lt"
+                    }
+                    """)
+                .contentType(ContentType.JSON)
+                .when()
+                .request("POST", "/register")
+                .then()
+                .assertThat()
+                .statusCode(201)
+                .body(
+                        "size()",
+                        is(16),
+                        "id",
+                        not(equalTo(0)),
+                        "firstName",
+                        equalTo("Testas"),
+                        "lastName",
+                        equalTo("Testukaitis"),
+                        "country",
+                        equalTo("Lithuania"),
+                        "password",
+                        not(equalTo("Testas123*")),
+                        "displayName",
+                        equalTo("Jukava"),
+                        "roles",
+                        hasSize(1),
+                        "roles[0].id",
+                        equalTo(1),
+                        "authorities",
+                        hasSize(1),
+                        "authorities[0].id",
+                        equalTo(1),
+                        "dateOfBirth",
+                        equalTo("1903-01-01"),
+                        "gender",
+                        nullValue(),
+                        "username",
+                        equalTo("jukava@testas.lt"),
+                        "email",
+                        equalTo("jukava@testas.lt"),
+                        "enabled",
+                        equalTo(true),
+                        "accountNonLocked",
+                        equalTo(true),
+                        "accountNonExpired",
+                        equalTo(true),
+                        "credentialsNonExpired",
+                        equalTo(true));
+    }
 
     @Test
     void whenVisitorEntersLowercaseFirstName_theReturn400AndResponseBody() {
