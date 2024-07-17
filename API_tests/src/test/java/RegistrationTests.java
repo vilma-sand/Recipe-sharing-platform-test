@@ -222,6 +222,74 @@ public class RegistrationTests {
                         equalTo(true));
     }
 
+    @Test
+    void whenVisitorSkipsGenderField_theReturn201AndResponseBody() {
+
+        given().body(
+                        """
+                {
+                    "firstName": "Testas",
+                    "lastName": "Testukaitis",
+                    "country": "Lithuania",
+                    "password": "Testas123*",
+                    "displayName": "Jukava",
+                    "roles": [
+                        {
+                            "id": 1
+                        }
+                    ],
+                    "dateOfBirth": "2001-07-01",
+                    "gender": null,
+                    "email": "jukava@testas.lt"
+                }
+                """)
+                .contentType(ContentType.JSON)
+                .when()
+                .request("POST", "/register")
+                .then()
+                .assertThat()
+                .statusCode(201)
+                .body(
+                        "size()",
+                        is(16),
+                        "id",
+                        not(equalTo(0)),
+                        "firstName",
+                        equalTo("Testas"),
+                        "lastName",
+                        equalTo("Testukaitis"),
+                        "displayName",
+                        equalTo("Jukava"),
+                        "email",
+                        equalTo("jukava@testas.lt"),
+                        "password",
+                        not(equalTo("Testas1*")),
+                        "dateOfBirth",
+                        equalTo("2001-07-01"),
+                        "gender",
+                        equalTo(null),
+                        "country",
+                        equalTo("Lithuania"),
+                        "roles",
+                        hasSize(1),
+                        "roles[0].id",
+                        equalTo(1),
+                        "authorities",
+                        hasSize(1),
+                        "authorities[0].id",
+                        equalTo(1),
+                        "username",
+                        equalTo("jukava@testas.lt"),
+                        "accountNonLocked",
+                        equalTo(true),
+                        "accountNonExpired",
+                        equalTo(true),
+                        "credentialsNonExpired",
+                        equalTo(true),
+                        "enabled",
+                        equalTo(true));
+    }
+
     @ParameterizedTest
     @CsvFileSource(resources = "/invalidGenders.csv")
     void whenVisitorEntersGenderWithFirstLowercase_theReturn400AndResponseBody(String input) {
