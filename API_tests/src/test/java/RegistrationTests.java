@@ -1277,6 +1277,40 @@ public class RegistrationTests {
                         equalTo(
                                 "Must be a valid country name. It should start with an uppercase letter. English only"));
     }
+
+    @Test
+    void whenVisitorEntersCountryNameWithLithuanianLetters_theReturn400AndResponseBody() {
+
+        given().body(
+                        """
+                {
+                    "firstName": "Testas",
+                    "lastName": "Testukaitis",
+                    "country": "Lietuva",
+                    "password": "Testukas123*",
+                    "displayName": "J3",
+                    "roles": [
+                        {
+                            "id": 1
+                        }
+                    ],
+                    "dateOfBirth": "1800-07-16",
+                    "email": "jukava@testas.lt"
+                }
+                """)
+                .contentType(ContentType.JSON)
+                .when()
+                .request("POST", "/register")
+                .then()
+                .assertThat()
+                .statusCode(400)
+                .body(
+                        "size()",
+                        is(1),
+                        "country",
+                        equalTo(
+                                "Must be a valid country name. It should start with an uppercase letter. English only"));
+    }
     //    @Test
     //    void whenVisitorEntersInvalidFormatEmail_theReturn400AndResponseBody() {
     //
