@@ -253,6 +253,40 @@ public class RegistrationTests {
                 .body("size()", is(1), "gender", equalTo("Must be Female, Male, or Other"));
     }
 
+    //    @Test
+    //    void whenVisitorEntersTwoSameRoles_theReturn400AndResponseBody() {
+    //
+    //        given().body(
+    //                        """
+    //                {
+    //                    "firstName": "testas",
+    //                    "lastName": "Testukaitis",
+    //                    "country": "Lithuania",
+    //                    "password": "Testas123*",
+    //                    "displayName": "Jukava",
+    //                    "roles": [
+    //                        {"id": 1},
+    //                        {"id": 1}
+    //                    ],
+    //                    "dateOfBirth": "1903-01-01",
+    //                    "email": "jukava@testas.lt"
+    //                }
+    //                """)
+    //                .contentType(ContentType.JSON)
+    //                .when()
+    //                .request("POST", "/register")
+    //                .then()
+    //                .assertThat()
+    //                .statusCode(400)
+    //                .body(
+    //                        "size()",
+    //                        is(1),
+    //                        "firstName",
+    //                        equalTo(
+    //                                "You can only enter letters. First letter must be capital. At least 2 characters
+    // long"));
+    //    }
+
     @Test
     void whenVisitorEntersLowercaseFirstName_theReturn400AndResponseBody() {
 
@@ -785,7 +819,7 @@ public class RegistrationTests {
                         "firstName": "Testas",
                         "lastName": "Testukaitis",
                         "country": "Lithuania",
-                        "password": "d*1hfgdfstergfdsgtjghfdgtijdhfgdfstergfdsgtjghfdgtijdhfgdfstergfdsgtjghfdgtijdhfgdfstergfdsgtjghfdgtijdhfgdfstergfdsgtjghfdgtijdhfgdfstergfdsgtjghfdgtijdhfgdfstergfdsgtjghfdgtijdhfgdfstergfdsgtjghfdgtijdhfgdfstergfdsgtjghfdgtijdhfgdfstergfdsgtjghfdgtijdhfgdfstergfdsgtjghfdgtij",
+                        "password": "d*1hfgdfstergfdsgtjghfdgtijdhfgdfstergfdsgtkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkjghfdgtijdhfgdfstergfdsgtjghfdgtijdhfgdfstergfdsgtjghfdgtijdhfgdfstergfdsgtjghfdgtijdhfgdfstergfdsgtjghfdgtijdhfgdfstergfdsgtjghfdgtijdhfgdfstergfdsgtjghfdgtijdhfgdfstergfdsgtjghfdgtijdhfgdfstergfdsgtjghfdgtijdhfgdfstergfdsgtjghfdgtij",
                         "displayName": "Jukava",
                         "roles": [
                             {
@@ -1205,6 +1239,55 @@ public class RegistrationTests {
     //                .statusCode(400)
     //                .body("size()", is(1), "email", equalTo("Does not match correct email format"));
     //    }
+    @Test
+    void testEmailIsUnique_theReturn400AndResponseBody() {
+        given().body(
+                        """
+                        {
+                            "firstName": "Testas",
+                            "lastName": "Testukaitis",
+                            "country": "Lithuania",
+                            "password": "Testukas123*",
+                            "displayName": "Jonasass",
+                            "roles": [
+                                {
+                                    "id": 1
+                                }
+                            ],
+                            "dateOfBirth": "1903-01-01",
+                            "email": "jukava@testas.lt"
+                        }
+                        """)
+                .contentType(ContentType.JSON)
+                .when()
+                .post("/register")
+                .then()
+                .assertThat()
+                .statusCode(201);
+
+        Response response = given().contentType(ContentType.JSON)
+                .body(
+                        """
+                        {
+                            "firstName": "Testas",
+                            "lastName": "Testukaitis",
+                            "country": "Lithuania",
+                            "password": "Testukas123*",
+                            "displayName": "Jonasas",
+                            "roles": [
+                                {
+                                    "id": 1
+                                }
+                            ],
+                            "dateOfBirth": "1903-01-01",
+                            "email": "jukava@testas.lt"
+                        }
+                        """)
+                .when()
+                .post("/register");
+
+        response.then().statusCode(400).body("email", equalTo("Already exists"));
+    }
 
     @BeforeEach
     void cleanUpDatabase() throws SQLException {
