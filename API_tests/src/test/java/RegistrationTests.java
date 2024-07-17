@@ -1279,14 +1279,13 @@ public class RegistrationTests {
     }
 
     @Test
-    void whenVisitorEntersCountryNameWithLithuanianLetters_theReturn400AndResponseBody() {
+    void whenCountryFieldDoesNotExist_theReturn400AndResponseBody() {
 
         given().body(
                         """
                 {
                     "firstName": "Testas",
                     "lastName": "Testukaitis",
-                    "country": "Lietuva",
                     "password": "Testukas123*",
                     "displayName": "J3",
                     "roles": [
@@ -1304,12 +1303,7 @@ public class RegistrationTests {
                 .then()
                 .assertThat()
                 .statusCode(400)
-                .body(
-                        "size()",
-                        is(1),
-                        "country",
-                        equalTo(
-                                "Must be a valid country name. It should start with an uppercase letter. English only"));
+                .body("size()", is(1), "country", equalTo("Cannot be null or empty"));
     }
     //    @Test
     //    void whenVisitorEntersInvalidFormatEmail_theReturn400AndResponseBody() {
