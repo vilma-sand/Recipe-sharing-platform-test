@@ -1340,7 +1340,7 @@ public class RegistrationTests {
     }
 
     @Test
-    void whenVisitorEntersInvalidFormatEmail_theReturn400AndResponseBody() {
+    void whenVisitorEntersInvalidFormatEmailWithoutDot_theReturn400AndResponseBody() {
 
         given().body(
                         """
@@ -1358,6 +1358,36 @@ public class RegistrationTests {
                         ],
                         "dateOfBirth": "1906-07-16",
                         "email": "jukava@testaslt"
+                    }
+                    """)
+                .contentType(ContentType.JSON)
+                .when()
+                .request("POST", "/register")
+                .then()
+                .assertThat()
+                .statusCode(400)
+                .body("size()", is(1), "email", equalTo("Does not match correct email format"));
+    }
+
+    @Test
+    void whenVisitorEntersInvalidFormatEmailWithoutEta_theReturn400AndResponseBody() {
+
+        given().body(
+                        """
+                    {
+                        "firstName": "Testas",
+                        "lastName": "Testukaitis",
+                        "country": "Lithuania",
+                        "password": "Testukas123*",
+                        "displayName": "J3",
+                        "gender": "Male",
+                        "roles": [
+                            {
+                                "id": 1
+                            }
+                        ],
+                        "dateOfBirth": "1906-07-16",
+                        "email": "jukavatestas.lt"
                     }
                     """)
                 .contentType(ContentType.JSON)
