@@ -318,7 +318,7 @@ public class RegistrationTests {
                         is(1),
                         "firstName",
                         equalTo(
-                                "You can only enter letters. First letter must be capital. At least 2 characters long"));
+                                "You can only enter English letters. First letter must be capital. At least 2 characters long"));
     }
 
     @Test
@@ -352,7 +352,7 @@ public class RegistrationTests {
                         is(1),
                         "firstName",
                         equalTo(
-                                "You can only enter letters. First letter must be capital. At least 2 characters long"));
+                                "You can only enter English letters. First letter must be capital. At least 2 characters long"));
     }
 
     @Test
@@ -444,7 +444,7 @@ public class RegistrationTests {
                         is(1),
                         "firstName",
                         equalTo(
-                                "You can only enter letters. First letter must be capital. At least 2 characters long"));
+                                "You can only enter English letters. First letter must be capital. At least 2 characters long"));
     }
 
     @Test
@@ -478,7 +478,7 @@ public class RegistrationTests {
                         is(1),
                         "firstName",
                         equalTo(
-                                "You can only enter letters. First letter must be capital. At least 2 characters long"));
+                                "You can only enter English letters. First letter must be capital. At least 2 characters long"));
     }
 
     @Test
@@ -512,7 +512,7 @@ public class RegistrationTests {
                         is(1),
                         "lastName",
                         equalTo(
-                                "You can only enter letters. First letter must be capital. At least 2 characters long"));
+                                "You can only enter English letters. First letter must be capital. At least 2 characters long"));
     }
 
     @Test
@@ -546,7 +546,7 @@ public class RegistrationTests {
                         is(1),
                         "lastName",
                         equalTo(
-                                "You can only enter letters. First letter must be capital. At least 2 characters long"));
+                                "You can only enter English letters. First letter must be capital. At least 2 characters long"));
     }
 
     @Test
@@ -580,7 +580,7 @@ public class RegistrationTests {
                         is(1),
                         "lastName",
                         equalTo(
-                                "You can only enter letters. First letter must be capital. At least 2 characters long"));
+                                "You can only enter English letters. First letter must be capital. At least 2 characters long"));
     }
 
     @Test
@@ -671,7 +671,7 @@ public class RegistrationTests {
                         is(1),
                         "lastName",
                         equalTo(
-                                "You can only enter letters. First letter must be capital. At least 2 characters long"));
+                                "You can only enter English letters. First letter must be capital. At least 2 characters long"));
     }
 
     @Test
@@ -819,7 +819,7 @@ public class RegistrationTests {
                         "firstName": "Testas",
                         "lastName": "Testukaitis",
                         "country": "Lithuania",
-                        "password": "d*1hfgdfstergfdsgtjghfdgtijdhfgdfstergfdsgtkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkjghfdgtijdhfgdfstergfdsgtjghfdgtijdhfgdfstergfdsgtjghfdgtijdhfgdfstergfdsgtjghfdgtijdhfgdfstergfdsgtjghfdgtijdhfgdfstergfdsgtjghfdgtijdhfgdfstergfdsgtjghfdgtijdhfgdfstergfdsgtjghfdgtijdhfgdfstergfdsgtjghfdgtijdhfgdfstergfdsgtjghfdgtij",
+                        "password": "T*1hfgdfstergfdsgtjghfdgtijdhfgdfstergfdsgtkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkjghfdgtijdhfgdfstergfdsgtjghfdgtijdhfgdfstergfdsgtjghfdgtijdhfgdfstergfdsgtjghfdgtijdhfgdfstergfdsgtjghfdgtijdhfgdfstergfdsgtjghfdgtijdhfgdfstergfdsgtjghfdgtijdhfgdfstergfdsgtjghfdgtijdhfgdfstergfdsgtjghfdgtijdhfgdfstergfdsgtjghfdgtij",
                         "displayName": "Jukava",
                         "roles": [
                             {
@@ -936,7 +936,7 @@ public class RegistrationTests {
                         is(1),
                         "displayName",
                         equalTo(
-                                "You can only enter letters or numbers. At least 1 character long. Cannot begin or end with a space. No more than one space between words"));
+                                "You can only enter English letters or numbers. At least 1 character long. Cannot begin or end with a space. No more than one space between words"));
     }
 
     @Test
@@ -970,7 +970,7 @@ public class RegistrationTests {
                         is(1),
                         "displayName",
                         equalTo(
-                                "You can only enter letters or numbers. At least 1 character long. Cannot begin or end with a space. No more than one space between words"));
+                                "You can only enter English letters or numbers. At least 1 character long. Cannot begin or end with a space. No more than one space between words"));
     }
 
     @Test
@@ -1004,7 +1004,7 @@ public class RegistrationTests {
                         is(1),
                         "displayName",
                         equalTo(
-                                "You can only enter letters or numbers. At least 1 character long. Cannot begin or end with a space. No more than one space between words"));
+                                "You can only enter English letters or numbers. At least 1 character long. Cannot begin or end with a space. No more than one space between words"));
     }
 
     @Test
@@ -1095,7 +1095,7 @@ public class RegistrationTests {
                         is(1),
                         "displayName",
                         equalTo(
-                                "You can only enter letters or numbers. At least 1 character long. Cannot begin or end with a space. No more than one space between words"));
+                                "You can only enter English letters or numbers. At least 1 character long. Cannot begin or end with a space. No more than one space between words"));
     }
 
     @Test
