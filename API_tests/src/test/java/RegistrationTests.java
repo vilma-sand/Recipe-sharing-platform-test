@@ -1210,6 +1210,40 @@ public class RegistrationTests {
                         equalTo("Cannot be older than the year 1900, or younger than 13 years old"));
     }
 
+    @Test
+    void whenVisitorEntersCountryNameWithFirstLowercaseLetter_theReturn400AndResponseBody() {
+
+        given().body(
+                        """
+                {
+                    "firstName": "Testas",
+                    "lastName": "Testukaitis",
+                    "country": "south Korea",
+                    "password": "Testukas123*",
+                    "displayName": "J3",
+                    "roles": [
+                        {
+                            "id": 1
+                        }
+                    ],
+                    "dateOfBirth": "1800-07-16",
+                    "email": "jukava@testas.lt"
+                }
+                """)
+                .contentType(ContentType.JSON)
+                .when()
+                .request("POST", "/register")
+                .then()
+                .assertThat()
+                .statusCode(400)
+                .body(
+                        "size()",
+                        is(1),
+                        "country",
+                        equalTo(
+                                "Must be a valid country name. It should start with an uppercase letter. English only"));
+    }
+    
     //    @Test
     //    void whenVisitorEntersInvalidFormatEmail_theReturn400AndResponseBody() {
     //
