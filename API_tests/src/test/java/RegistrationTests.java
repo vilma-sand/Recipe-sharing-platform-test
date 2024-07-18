@@ -1316,7 +1316,8 @@ public class RegistrationTests {
     @Test
     void whenVisitorEntersTodayDateOfBirth_theReturn400AndResponseBody() {
         LocalDate today = LocalDate.now();
-        given().body("""
+        given().body(
+                        """
                     {
                         "firstName": "Testas",
                         "lastName": "Testukaitis",
@@ -1333,6 +1334,40 @@ public class RegistrationTests {
                     }
                     """
                                 .formatted(today))
+                .contentType(ContentType.JSON)
+                .when()
+                .request("POST", "/register")
+                .then()
+                .assertThat()
+                .statusCode(400)
+                .body(
+                        "size()",
+                        is(1),
+                        "dateOfBirth",
+                        equalTo("Cannot be older than the year 1900, or younger than 13 years old"));
+    }
+
+    @Test
+    void whenVisitorTryingToRegisterWithToYoungDateOfBirth_thenReturn400AndResponseBody() {
+        LocalDate dayBefore13YearsPlusOne = LocalDate.now().minusYears(13).plusDays(1);
+        given().body(
+                        """
+                    {
+                        "firstName": "Testas",
+                        "lastName": "Testukaitis",
+                        "country": "Lithuania",
+                        "password": "Testukas123*",
+                        "displayName": "J3",
+                        "roles": [
+                            {
+                                "id": 1
+                            }
+                        ],
+                        "dateOfBirth": "%s",
+                        "email": "jukava@testas.lt"
+                    }
+                    """
+                                .formatted(dayBefore13YearsPlusOne))
                 .contentType(ContentType.JSON)
                 .when()
                 .request("POST", "/register")
