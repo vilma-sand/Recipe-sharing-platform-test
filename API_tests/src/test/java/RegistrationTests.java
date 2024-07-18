@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.time.LocalDate;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
@@ -1312,38 +1313,38 @@ public class RegistrationTests {
                         equalTo("Cannot be older than the year 1900, or younger than 13 years old"));
     }
 
-//    @Test
-//    void whenVisitorEntersTodayDateOfBirth_theReturn400AndResponseBody() {
-//
-//        given().body(
-//                        """
-//                {
-//                    "firstName": "Testas",
-//                    "lastName": "Testukaitis",
-//                    "country": "Lithuania",
-//                    "password": "Testukas123*",
-//                    "displayName": "J3",
-//                    "roles": [
-//                        {
-//                            "id": 1
-//                        }
-//                    ],
-//                    "dateOfBirth": LocalDate.now(),
-//                    "email": "jukava@testas.lt"
-//                }
-//                """)
-//                .contentType(ContentType.JSON)
-//                .when()
-//                .request("POST", "/register")
-//                .then()
-//                .assertThat()
-//                .statusCode(400)
-//                .body(
-//                        "size()",
-//                        is(1),
-//                        "dateOfBirth",
-//                        equalTo("Cannot be older than the year 1900, or younger than 13 years old"));
-//    }
+    @Test
+    void whenVisitorEntersTodayDateOfBirth_theReturn400AndResponseBody() {
+        LocalDate today = LocalDate.now();
+        given().body("""
+                    {
+                        "firstName": "Testas",
+                        "lastName": "Testukaitis",
+                        "country": "Lithuania",
+                        "password": "Testukas123*",
+                        "displayName": "J3",
+                        "roles": [
+                            {
+                                "id": 1
+                            }
+                        ],
+                        "dateOfBirth": "%s",
+                        "email": "jukava@testas.lt"
+                    }
+                    """
+                                .formatted(today))
+                .contentType(ContentType.JSON)
+                .when()
+                .request("POST", "/register")
+                .then()
+                .assertThat()
+                .statusCode(400)
+                .body(
+                        "size()",
+                        is(1),
+                        "dateOfBirth",
+                        equalTo("Cannot be older than the year 1900, or younger than 13 years old"));
+    }
 
     @Test
     void whenVisitorEntersFutureDateOfBirth_theReturn400AndResponseBody() {
@@ -1432,7 +1433,7 @@ public class RegistrationTests {
                 .then()
                 .assertThat()
                 .statusCode(400)
-                .body("size()", is(1), "dateOfBirth", equalTo("Cannot be null or empty"));
+                .body("size()", is(1), "dateOfBirth", equalTo("Invalid format"));
     }
 
     @Test
@@ -1461,7 +1462,7 @@ public class RegistrationTests {
                 .then()
                 .assertThat()
                 .statusCode(400)
-                .body("size()", is(1), "dateOfBirth", equalTo("Cannot be null or empty"));
+                .body("size()", is(1), "dateOfBirth", equalTo("Invalid format"));
     }
 
     @Test
