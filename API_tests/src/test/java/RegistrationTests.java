@@ -1347,6 +1347,39 @@ public class RegistrationTests {
                         equalTo("Cannot be older than the year 1900, or younger than 13 years old"));
     }
 
+    @ParameterizedTest
+    @CsvFileSource(resources = "/invalidGenders.csv")
+    void whenVisitorEntersTodayDateOfBirthAndInvalidGender_theReturn400AndResponseBody(String input) {
+        LocalDate today = LocalDate.now();
+        given().body(
+                        """
+                    {
+                        "firstName": "Testas",
+                        "lastName": "Testukaitis",
+                        "country": "Lithuania",
+                        "password": "Testukas123*",
+                        "displayName": "J3",
+                        "roles": [
+                            {
+                                "id": 1
+                            }
+                        ],
+                        "gender": "%s",
+                        "dateOfBirth": "%s",
+
+                        "email": "jukava@testas.lt"
+                    }
+                    """
+                                .formatted(input, today))
+                .contentType(ContentType.JSON)
+                .when()
+                .request("POST", "/register")
+                .then()
+                .assertThat()
+                .statusCode(400)
+                .body("size()", is(1), "gender", equalTo("Must be Female, Male, or Other"));
+    }
+
     @Test
     void whenVisitorTryingToRegisterWithToYoungDateOfBirth_thenReturn400AndResponseBody() {
         LocalDate dayBefore13YearsPlusOne = LocalDate.now().minusYears(13).plusDays(1);
