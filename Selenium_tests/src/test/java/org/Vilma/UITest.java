@@ -66,10 +66,23 @@ public class UITest extends BaseTest {
         registerPage.scrollDown();
         Thread.sleep(2000);
         registerPage.clickSubmitButton();
-        assertTrue(driver.getPageSource().contains("This field is required"), "Error messages is not as expected");
-        assertEquals("http://localhost:5173/register", driver.getCurrentUrl(), "Current URL is not as expected");
 
+        String pageSource = driver.getPageSource();
+        int occurrences = countOccurrences(pageSource, "This field is required");
+
+        assertEquals(7, occurrences, "The number of 'This field is required' messages is not as expected");
+        assertTrue(pageSource.contains("You must check this in order to continue"), "Error message 'You must check this in order to continue' is not as expected");
+        assertEquals("http://localhost:5173/register", driver.getCurrentUrl(), "Current URL is not as expected");
     }
+    private int countOccurrences(String haystack, String needle) {
+        int count = 0;
+        int idx = 0;
+        while ((idx = haystack.indexOf(needle, idx)) != -1) {
+            count++;
+            idx += needle.length();
+        }
+        return count;
+}
     @Test
     void whenVisitorEntersFirstNameWithLithuanianLetters_displayedErrorMessage() throws InterruptedException {
         HomePage homePage = new HomePage(driver);
