@@ -344,6 +344,61 @@ public class UITest extends BaseTest {
         assertTrue(driver.getPageSource().contains("You can only enter English letters or numbers. At least 1 character long. Cannot begin or end with a space. No more than one space between words"), "Error messages is not as expected");
         assertEquals("http://localhost:5173/register", driver.getCurrentUrl(), "Current URL is not as expected");
     }
+    @Test
+    void whenVisitorEntersNotUniqueEmail_displayedErrorMessage() {
+        HomePage homePage = new HomePage(driver);
+        RegistrationPage registrationPage = new RegistrationPage(driver);
+
+        homePage.clickLinkRegisterAndWaitUrl();
+
+        String inputFirstName = "Tomukas";
+        registrationPage.enterFirstName(inputFirstName);
+        String inputLastName = "Tomukaitis";
+        registrationPage.enterLastName(inputLastName);
+        String inputDisplayName = "Tomasas";
+        registrationPage.enterDisplayName(inputDisplayName);
+        String inputEmail = "tomukas23@gmail.com";
+        registrationPage.enterEmail(inputEmail);
+        String inputPassword = "Tomasa23*";
+        registrationPage.enterPassword(inputPassword);
+        String inputRepeatPassword = "Tomasa23*";
+        registrationPage.enterRepeatPassword(inputRepeatPassword);
+        String inputDateOfBirth = "07/06/2011";
+        registrationPage.enterDateOfBirth(inputDateOfBirth);
+        registrationPage.clickPickYourGenderMale();
+        String inputCountryYouResideIn = "Angola";
+        registrationPage.enterCountryYouResideIn(inputCountryYouResideIn);
+        registrationPage.clickIAcceptPrivacyPolicy();
+        registrationPage.scrollDownToButtonSubmit();
+        registrationPage.clickButtonSubmitAndWaitUrl();
+
+        homePage.clickLinkRegisterAndWaitUrl();
+
+        String inputSecondFirstName = "Tomukas";
+        registrationPage.enterFirstName(inputSecondFirstName);
+        String inputSecondLastName = "Tomukaitis";
+        registrationPage.enterLastName(inputSecondLastName);
+        String inputSecondDisplayName = "Tomasas2";
+        registrationPage.enterDisplayName(inputSecondDisplayName);
+        String inputSecondEmail = "tomukas23@gmail.com";
+        registrationPage.enterEmail(inputSecondEmail);
+        String inputSecondPassword = "Tomasa23*";
+        registrationPage.enterPassword(inputSecondPassword);
+        String inputSecondRepeatPassword = "Tomasa23*";
+        registrationPage.enterRepeatPassword(inputSecondRepeatPassword);
+        String inputSecondDateOfBirth = "07/06/2011";
+        registrationPage.enterDateOfBirth(inputSecondDateOfBirth);
+        registrationPage.clickPickYourGenderMale();
+        String inputSecondCountryYouResideIn = "Angola";
+        registrationPage.enterCountryYouResideIn(inputSecondCountryYouResideIn);
+        registrationPage.clickIAcceptPrivacyPolicy();
+        registrationPage.scrollDownToButtonSubmit();
+        registrationPage.clickSubmitButton();
+
+        assertTrue(driver.getPageSource().contains("Already exists"), "Error messages is not as expected");
+        assertEquals("http://localhost:5173/register", driver.getCurrentUrl(), "Current URL is not as expected");
+    }
+
     }
 
 
