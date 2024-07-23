@@ -45,9 +45,9 @@ public class BaseTest {
     }
 
 
-//    @AfterEach
-//    void tearDown() {
-//        driver.quit();
-//    }
+    @AfterEach
+    void tearDown() {
+        driver.quit();
+    }
 
 }

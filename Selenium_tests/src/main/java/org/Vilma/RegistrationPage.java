@@ -3,7 +3,12 @@ package org.Vilma;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.Wait;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
 
 public class RegistrationPage extends BasePage {
     public RegistrationPage(WebDriver driver) {
@@ -34,7 +39,7 @@ public class RegistrationPage extends BasePage {
         @FindBy(xpath = "//button[(@class = 'btn btn-primary')]")
         WebElement submitButton;
 
-    public void clickLinkHome() {
+        public void clickLinkHome() {
         linkHome.click();
     }
         public void enterFirstName(String inputFirstName) {
@@ -72,6 +77,19 @@ public class RegistrationPage extends BasePage {
         }
         public void clickSubmitButton() {submitButton.click();}
 
+
+        public void clickButtonSubmitAndWaitUrl() {
+        this.submitButton.click();
+        Wait<WebDriver> wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        wait.until(d -> driver.getCurrentUrl().equals("http://localhost:5173/"));
+        }
+
+        public void scrollDownToButtonSubmit() {
+        int deltaY = submitButton.getRect().y;
+        new Actions(driver)
+                .scrollByAmount(0, deltaY)
+                .perform();
+        }
 
 
 

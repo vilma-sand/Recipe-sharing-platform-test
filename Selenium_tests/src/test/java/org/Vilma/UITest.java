@@ -10,7 +10,7 @@ public class UITest extends BaseTest {
     @Test
     void whenVisitorClickRegisterLink_userIsMovedToPageRegister() {
         HomePage homePage = new HomePage(driver);
-        homePage.clickLinkRegister();
+        homePage.clickLinkRegisterAndWaitUrl();
         assertEquals("http://localhost:5173/register", driver.getCurrentUrl(), "Current URL is not as expected");
     }
 
@@ -18,17 +18,17 @@ public class UITest extends BaseTest {
     void whenVisitorClickHomeLink_userIsMovedToPageHome() {
         HomePage homePage = new HomePage(driver);
         RegistrationPage registrationPage = new RegistrationPage(driver);
-        homePage.clickLinkRegister();
+        homePage.clickLinkRegisterAndWaitUrl();
         registrationPage.clickLinkHome();
         assertEquals("http://localhost:5173/", driver.getCurrentUrl(), "Current URL is not as expected");
     }
 
     @Test
-    void whenVisitorEntersValidInputs_userLoggedInSuccessfully_displayedSuccessMessage() throws InterruptedException {
+    void whenVisitorEntersValidInputs_userLoggedInSuccessfully_displayedSuccessMessage() {
             HomePage homePage = new HomePage(driver);
             RegistrationPage registrationPage = new RegistrationPage(driver);
 
-            homePage.clickLinkRegister();
+            homePage.clickLinkRegisterAndWaitUrl();
 
             String inputFirstName = "Tomas";
             registrationPage.enterFirstName(inputFirstName);
@@ -48,10 +48,8 @@ public class UITest extends BaseTest {
             String inputCountryYouResideIn = "Angola";
             registrationPage.enterCountryYouResideIn(inputCountryYouResideIn);
             registrationPage.clickIAcceptPrivacyPolicy();
-            registrationPage.scrollDown();
-            Thread.sleep(2000);
-            registrationPage.clickSubmitButton();
-            Thread.sleep(2000);
+            registrationPage.scrollDownToButtonSubmit();
+            registrationPage.clickButtonSubmitAndWaitUrl();
             assertTrue(driver.getPageSource().contains("You have registered successfully. You can now log in"), "Success message is not as expected");
             assertEquals("http://localhost:5173/", driver.getCurrentUrl(), "Current URL is not as expected");
         }
@@ -59,36 +57,35 @@ public class UITest extends BaseTest {
     //UNHAPPY tests
 
     @Test
-    void whenVisitorSubmitEmptyRegistrationForm_displayedErrorMessages() throws InterruptedException {
+    void whenVisitorSubmitEmptyRegistrationForm_displayedErrorMessages() {
         HomePage homePage = new HomePage(driver);
         RegistrationPage registerPage = new RegistrationPage(driver);
-        homePage.clickLinkRegister();
-        registerPage.scrollDown();
-        Thread.sleep(2000);
+        homePage.clickLinkRegisterAndWaitUrl();
+        registerPage.scrollDownToButtonSubmit();
         registerPage.clickSubmitButton();
 
         String pageSource = driver.getPageSource();
-        int occurrences = countOccurrences(pageSource, "This field is required");
+        int occurrences = countOccurrences(pageSource);
 
-        assertEquals(7, occurrences, "The number of 'This field is required' messages is not as expected");
+        assertEquals(7, occurrences, "The number of 'Cannot be null or empty' messages is not as expected");
         assertTrue(pageSource.contains("You must check this in order to continue"), "Error message 'You must check this in order to continue' is not as expected");
         assertEquals("http://localhost:5173/register", driver.getCurrentUrl(), "Current URL is not as expected");
     }
-    private int countOccurrences(String haystack, String needle) {
+    private int countOccurrences(String haystack) {
         int count = 0;
         int idx = 0;
-        while ((idx = haystack.indexOf(needle, idx)) != -1) {
+        while ((idx = haystack.indexOf("Cannot be null or empty", idx)) != -1) {
             count++;
-            idx += needle.length();
+            idx += "Cannot be null or empty".length();
         }
         return count;
 }
     @Test
-    void whenVisitorEntersFirstNameWithLithuanianLetters_displayedErrorMessage() throws InterruptedException {
+    void whenVisitorEntersFirstNameWithLithuanianLetters_displayedErrorMessage() {
         HomePage homePage = new HomePage(driver);
         RegistrationPage registrationPage = new RegistrationPage(driver);
 
-        homePage.clickLinkRegister();
+        homePage.clickLinkRegisterAndWaitUrl();
 
         String inputFirstName = "Tomaš";
         registrationPage.enterFirstName(inputFirstName);
@@ -108,12 +105,10 @@ public class UITest extends BaseTest {
         String inputCountryYouResideIn = "Angola";
         registrationPage.enterCountryYouResideIn(inputCountryYouResideIn);
         registrationPage.clickIAcceptPrivacyPolicy();
-        registrationPage.scrollDown();
-        Thread.sleep(2000);
+        registrationPage.scrollDownToButtonSubmit();
         registrationPage.clickSubmitButton();
-        Thread.sleep(2000);
 
-        assertTrue(driver.getPageSource().contains("You can only enter letters. First letter must be capital. At least 2 characters long"), "Error messages is not as expected");
+        assertTrue(driver.getPageSource().contains("You can only enter English letters. First letter must be capital. At least 2 characters long."), "Error messages is not as expected");
         assertEquals("http://localhost:5173/register", driver.getCurrentUrl(), "Current URL is not as expected");
     }
 
