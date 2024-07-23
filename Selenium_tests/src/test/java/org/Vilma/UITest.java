@@ -24,38 +24,7 @@ public class UITest extends BaseTest {
     }
 
     @Test
-    void whenVisitorEntersValidInputs_userLoggedInSuccessfully() throws InterruptedException {
-        RegistrationPage registrationPage = new RegistrationPage(driver);
-        HomePage homePage = new HomePage(driver);
-
-        homePage.clickLinkRegister();
-
-        String inputFirstName = "Tomas";
-        registrationPage.enterFirstName(inputFirstName);
-        String inputLastName = "Tomasaitis";
-        registrationPage.enterLastName(inputLastName);
-        String inputDisplayName = "Tomasas";
-        registrationPage.enterDisplayName(inputDisplayName);
-        String inputEmail = "tomukas23@gmail.com";
-        registrationPage.enterEmail(inputEmail);
-        String inputPassword = "Tomasa23*";
-        registrationPage.enterPassword(inputPassword);
-        String inputRepeatPassword = "Tomasa23*";
-        registrationPage.enterRepeatPassword(inputRepeatPassword);
-        String inputDateOfBirth = "07/06/2011";
-        registrationPage.enterDateOfBirth(inputDateOfBirth);
-        registrationPage.clickPickYourGenderMale();
-        String inputCountryYouResideIn = "Angola";
-        registrationPage.enterCountryYouResideIn(inputCountryYouResideIn);
-        registrationPage.clickIAcceptPrivacyPolicy();
-        registrationPage.scrollDown();
-        Thread.sleep(2000);
-        registrationPage.clickSubmitButton();
-
-        assertEquals("http://localhost:5173/register", driver.getCurrentUrl(), "Current URL is not as expected");
-    }
-        @Test
-        void whenVisitorSubmitValidRegistrationForm_displayedSuccessMessage() throws InterruptedException {
+    void whenVisitorEntersValidInputs_userLoggedInSuccessfully_displayedSuccessMessage() throws InterruptedException {
             HomePage homePage = new HomePage(driver);
             RegistrationPage registrationPage = new RegistrationPage(driver);
 
@@ -84,13 +53,8 @@ public class UITest extends BaseTest {
             registrationPage.clickSubmitButton();
             Thread.sleep(2000);
             assertTrue(driver.getPageSource().contains("You have registered successfully. You can now log in"), "Success message is not as expected");
-
+            assertEquals("http://localhost:5173/", driver.getCurrentUrl(), "Current URL is not as expected");
         }
-//
-//        String actualFirstName = registrationPage.checkFirstName();
-//        String expectedFirstName = "Tomas";
-//        assertEquals(expectedFirstName, actualFirstName, "The First name should be " + expectedFirstName);
-
 
     //UNHAPPY tests
 
@@ -106,6 +70,41 @@ public class UITest extends BaseTest {
         assertEquals("http://localhost:5173/register", driver.getCurrentUrl(), "Current URL is not as expected");
 
     }
+    @Test
+    void whenVisitorEntersFirstNameWithLithuanianLetters_displayedErrorMessage() throws InterruptedException {
+        HomePage homePage = new HomePage(driver);
+        RegistrationPage registrationPage = new RegistrationPage(driver);
+
+        homePage.clickLinkRegister();
+
+        String inputFirstName = "Tomaš";
+        registrationPage.enterFirstName(inputFirstName);
+        String inputLastName = "Tomasaitis";
+        registrationPage.enterLastName(inputLastName);
+        String inputDisplayName = "Tomasas";
+        registrationPage.enterDisplayName(inputDisplayName);
+        String inputEmail = "tomukas23@gmail.com";
+        registrationPage.enterEmail(inputEmail);
+        String inputPassword = "Tomasa23*";
+        registrationPage.enterPassword(inputPassword);
+        String inputRepeatPassword = "Tomasa23*";
+        registrationPage.enterRepeatPassword(inputRepeatPassword);
+        String inputDateOfBirth = "07/06/2011";
+        registrationPage.enterDateOfBirth(inputDateOfBirth);
+        registrationPage.clickPickYourGenderMale();
+        String inputCountryYouResideIn = "Angola";
+        registrationPage.enterCountryYouResideIn(inputCountryYouResideIn);
+        registrationPage.clickIAcceptPrivacyPolicy();
+        registrationPage.scrollDown();
+        Thread.sleep(2000);
+        registrationPage.clickSubmitButton();
+        Thread.sleep(2000);
+
+        assertTrue(driver.getPageSource().contains("You can only enter letters. First letter must be capital. At least 2 characters long"), "Error messages is not as expected");
+        assertEquals("http://localhost:5173/register", driver.getCurrentUrl(), "Current URL is not as expected");
+    }
+
+
     }
 
 
