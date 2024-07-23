@@ -398,7 +398,37 @@ public class UITest extends BaseTest {
         assertTrue(driver.getPageSource().contains("Already exists"), "Error messages is not as expected");
         assertEquals("http://localhost:5173/register", driver.getCurrentUrl(), "Current URL is not as expected");
     }
+    @Test
+    void whenVisitorEntersEmailWithCapitalLetters_displayedErrorMessage() {
+        HomePage homePage = new HomePage(driver);
+        RegistrationPage registrationPage = new RegistrationPage(driver);
 
+        homePage.clickLinkRegisterAndWaitUrl();
+
+        String inputFirstName = "Tomukas";
+        registrationPage.enterFirstName(inputFirstName);
+        String inputLastName = "Tomašaitis";
+        registrationPage.enterLastName(inputLastName);
+        String inputDisplayName = "Tomašas";
+        registrationPage.enterDisplayName(inputDisplayName);
+        String inputEmail = "TOMAS23@gmail.com";
+        registrationPage.enterEmail(inputEmail);
+        String inputPassword = "Tomasa23*";
+        registrationPage.enterPassword(inputPassword);
+        String inputRepeatPassword = "Tomasa23*";
+        registrationPage.enterRepeatPassword(inputRepeatPassword);
+        String inputDateOfBirth = "07/06/2011";
+        registrationPage.enterDateOfBirth(inputDateOfBirth);
+        registrationPage.clickPickYourGenderMale();
+        String inputCountryYouResideIn = "Angola";
+        registrationPage.enterCountryYouResideIn(inputCountryYouResideIn);
+        registrationPage.clickIAcceptPrivacyPolicy();
+        registrationPage.scrollDownToButtonSubmit();
+        registrationPage.clickSubmitButton();
+
+        assertTrue(driver.getPageSource().contains("May only contain English letters, all lowercase. Can contain numbers, and these symbols ._-"), "Error messages is not as expected");
+        assertEquals("http://localhost:5173/register", driver.getCurrentUrl(), "Current URL is not as expected");
+    }
     }
 
 
