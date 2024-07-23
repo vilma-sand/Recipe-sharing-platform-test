@@ -237,7 +237,7 @@ public class UITest extends BaseTest {
         assertEquals("http://localhost:5173/register", driver.getCurrentUrl(), "Current URL is not as expected");
     }
     @Test
-    void whenVisitorEntersOneSymbolLastName_displayedErrorMessage() {
+    void whenVisitorEntersNotUniqueDisplayName_displayedErrorMessage() {
         HomePage homePage = new HomePage(driver);
         RegistrationPage registrationPage = new RegistrationPage(driver);
 
@@ -245,7 +245,7 @@ public class UITest extends BaseTest {
 
         String inputFirstName = "Tomukas";
         registrationPage.enterFirstName(inputFirstName);
-        String inputLastName = "T";
+        String inputLastName = "Tomukaitis";
         registrationPage.enterLastName(inputLastName);
         String inputDisplayName = "Tomasas";
         registrationPage.enterDisplayName(inputDisplayName);
@@ -262,9 +262,32 @@ public class UITest extends BaseTest {
         registrationPage.enterCountryYouResideIn(inputCountryYouResideIn);
         registrationPage.clickIAcceptPrivacyPolicy();
         registrationPage.scrollDownToButtonSubmit();
+        registrationPage.clickButtonSubmitAndWaitUrl();
+
+        homePage.clickLinkRegisterAndWaitUrl();
+
+        String inputSecondFirstName = "Tomukas";
+        registrationPage.enterFirstName(inputSecondFirstName);
+        String inputSecondLastName = "Tomukaitis";
+        registrationPage.enterLastName(inputSecondLastName);
+        String inputSecondDisplayName = "Tomasas";
+        registrationPage.enterDisplayName(inputSecondDisplayName);
+        String inputSecondEmail = "tomukas234@gmail.com";
+        registrationPage.enterEmail(inputSecondEmail);
+        String inputSecondPassword = "Tomasa23*";
+        registrationPage.enterPassword(inputSecondPassword);
+        String inputSecondRepeatPassword = "Tomasa23*";
+        registrationPage.enterRepeatPassword(inputSecondRepeatPassword);
+        String inputSecondDateOfBirth = "07/06/2011";
+        registrationPage.enterDateOfBirth(inputSecondDateOfBirth);
+        registrationPage.clickPickYourGenderMale();
+        String inputSecondCountryYouResideIn = "Angola";
+        registrationPage.enterCountryYouResideIn(inputSecondCountryYouResideIn);
+        registrationPage.clickIAcceptPrivacyPolicy();
+        registrationPage.scrollDownToButtonSubmit();
         registrationPage.clickSubmitButton();
 
-        assertTrue(driver.getPageSource().contains("You can only enter English letters. First letter must be capital. At least 2 characters long."), "Error messages is not as expected");
+        assertTrue(driver.getPageSource().contains("Already exists"), "Error messages is not as expected");
         assertEquals("http://localhost:5173/register", driver.getCurrentUrl(), "Current URL is not as expected");
     }
     }
