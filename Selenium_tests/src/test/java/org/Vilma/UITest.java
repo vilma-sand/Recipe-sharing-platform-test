@@ -1,6 +1,8 @@
 package org.Vilma;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -288,6 +290,38 @@ public class UITest extends BaseTest {
         registrationPage.clickSubmitButton();
 
         assertTrue(driver.getPageSource().contains("Already exists"), "Error messages is not as expected");
+        assertEquals("http://localhost:5173/register", driver.getCurrentUrl(), "Current URL is not as expected");
+    }
+    @ParameterizedTest
+    @CsvFileSource(resources = "/swearWords.csv")
+    void whenVisitorEntersDisplayNameWithSwearWords_displayedErrorMessage(String input) {
+        HomePage homePage = new HomePage(driver);
+        RegistrationPage registrationPage = new RegistrationPage(driver);
+
+        homePage.clickLinkRegisterAndWaitUrl();
+
+        String inputFirstName = "Tomukas";
+        registrationPage.enterFirstName(inputFirstName);
+        String inputLastName = "Tomasaitis";
+        registrationPage.enterLastName(inputLastName);
+        String inputDisplayName = input;
+        registrationPage.enterDisplayName(inputDisplayName);
+        String inputEmail = "tomukas23@gmail.com";
+        registrationPage.enterEmail(inputEmail);
+        String inputPassword = "Tomasa23*";
+        registrationPage.enterPassword(inputPassword);
+        String inputRepeatPassword = "Tomasa23*";
+        registrationPage.enterRepeatPassword(inputRepeatPassword);
+        String inputDateOfBirth = "07/06/2011";
+        registrationPage.enterDateOfBirth(inputDateOfBirth);
+        registrationPage.clickPickYourGenderMale();
+        String inputCountryYouResideIn = "Angola";
+        registrationPage.enterCountryYouResideIn(inputCountryYouResideIn);
+        registrationPage.clickIAcceptPrivacyPolicy();
+        registrationPage.scrollDownToButtonSubmit();
+        registrationPage.clickSubmitButton();
+
+        assertTrue(driver.getPageSource().contains("Display name contains inappropriate language"), "Error messages is not as expected");
         assertEquals("http://localhost:5173/register", driver.getCurrentUrl(), "Current URL is not as expected");
     }
     }
