@@ -1656,7 +1656,12 @@ public class RegistrationTests {
                 .then()
                 .assertThat()
                 .statusCode(400)
-                .body("size()", is(1), "email", equalTo("Does not match correct email format"));
+                .body(
+                        "size()",
+                        is(1),
+                        "email",
+                        equalTo(
+                                "May only contain English letters, all lowercase. Can contain numbers, and these symbols ._-"));
     }
 
     @Test
@@ -1686,7 +1691,12 @@ public class RegistrationTests {
                 .then()
                 .assertThat()
                 .statusCode(400)
-                .body("size()", is(1), "email", equalTo("Does not match correct email format"));
+                .body(
+                        "size()",
+                        is(1),
+                        "email",
+                        equalTo(
+                                "May only contain English letters, all lowercase. Can contain numbers, and these symbols ._-"));
     }
 
     @Test
@@ -1805,7 +1815,12 @@ public class RegistrationTests {
                 .then()
                 .assertThat()
                 .statusCode(400)
-                .body("size()", is(1), "email", equalTo("Does not match correct email format"));
+                .body(
+                        "size()",
+                        is(1),
+                        "email",
+                        equalTo(
+                                "May only contain English letters, all lowercase. Can contain numbers, and these symbols ._-"));
     }
 
     @Test
@@ -1835,7 +1850,12 @@ public class RegistrationTests {
                 .then()
                 .assertThat()
                 .statusCode(400)
-                .body("size()", is(1), "email", equalTo("Does not match correct email format"));
+                .body(
+                        "size()",
+                        is(1),
+                        "email",
+                        equalTo(
+                                "May only contain English letters, all lowercase. Can contain numbers, and these symbols ._-"));
     }
 
     @Test
