@@ -16,25 +16,25 @@ public class RegistrationPage extends BasePage {
     }
         @FindBy(xpath = "//a[(@class = 'nav-link')]")
         WebElement linkHome;
-        @FindBy(xpath = "//input[(@id = 'first-name')]")
+        @FindBy(id = "first-name")
         WebElement firstName;
-        @FindBy(xpath = "//input[(@id = 'last-name')]")
+        @FindBy(id = "last-name")
         WebElement lastName;
-        @FindBy(xpath = "//input[(@id = 'displayName')]")
+        @FindBy(id = "displayName")
         WebElement displayName;
-        @FindBy(xpath = "//input[(@id = 'email')]")
+        @FindBy(id = "email")
         WebElement email;
-        @FindBy(xpath = "//input[(@id = 'password')]")
+        @FindBy(id = "password")
         WebElement password;
-        @FindBy(xpath = "//input[(@id = 'repeat-password')]")
+        @FindBy(id = "repeat-password")
         WebElement repeatPassword;
-        @FindBy(xpath = "//input[(@id = 'dateOfBirth')]")
+        @FindBy(id = "dateOfBirth")
         WebElement dateOfBirth;
-        @FindBy(xpath = "//input[(@id = 'male')]")
+        @FindBy(id = "male")
         WebElement pickYourGender;
-        @FindBy(xpath = "//select[(@id = 'country')]")
+        @FindBy(id = "country")
         WebElement countryYouResideIn;
-        @FindBy(xpath = "//input[(@id = 'privacy-policy')]")
+        @FindBy(id = "privacy-policy")
         WebElement privacyPolicy;
         @FindBy(xpath = "//button[(@class = 'btn btn-primary')]")
         WebElement submitButton;
@@ -72,12 +72,12 @@ public class RegistrationPage extends BasePage {
         public void clickIAcceptPrivacyPolicy() {
             privacyPolicy.click();
         }
-        public void scrollDown() {
-            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", submitButton);
-        }
+//        public void scrollDown() {
+//            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", submitButton);
+//        }
         public void clickSubmitButton() {submitButton.click();}
 
-
+        // tik kai pasikeičia adresas
         public void clickButtonSubmitAndWaitUrl() {
         this.submitButton.click();
         Wait<WebDriver> wait = new WebDriverWait(driver, Duration.ofSeconds(5));
