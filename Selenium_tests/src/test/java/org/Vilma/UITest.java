@@ -3,6 +3,7 @@ package org.Vilma;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
+import org.openqa.selenium.By;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -57,31 +58,19 @@ public class UITest extends BaseTest {
         }
 
     //UNHAPPY tests
-
+    
     @Test
-    void whenVisitorSubmitEmptyRegistrationForm_displayedErrorMessages() {
+    void whenVisitorSubmitEmptyRegistrationForm_displayedErrorMessagesForAllRequiredFields() {
         HomePage homePage = new HomePage(driver);
-        RegistrationPage registerPage = new RegistrationPage(driver);
+        RegistrationPage registrationPage = new RegistrationPage(driver);
+
         homePage.clickLinkRegisterAndWaitUrl();
-        registerPage.scrollDownToButtonSubmit();
-        registerPage.clickSubmitButton();
-
-        String pageSource = driver.getPageSource();
-        int occurrences = countOccurrences(pageSource);
-
-        assertEquals(7, occurrences, "The number of 'Cannot be null or empty' messages is not as expected");
-        assertTrue(pageSource.contains("You must check this in order to continue"), "Error message 'You must check this in order to continue' is not as expected");
+        registrationPage.scrollDownToButtonSubmit();
+        registrationPage.clickSubmitButton();
+        assertEquals(7, driver.findElements(By.xpath("//*[contains(text(),'This field is required')]")).size(), "Number of error messages is not as expected");
+        assertTrue(driver.getPageSource().contains("You must check this in order to continue"), "Error message 'You must check this in order to continue' is not as expected");
         assertEquals("http://localhost:5173/register", driver.getCurrentUrl(), "Current URL is not as expected");
     }
-    private int countOccurrences(String haystack) {
-        int count = 0;
-        int idx = 0;
-        while ((idx = haystack.indexOf("Cannot be null or empty", idx)) != -1) {
-            count++;
-            idx += "Cannot be null or empty".length();
-        }
-        return count;
-}
     @Test
     void whenVisitorEntersFirstNameWithLithuanianLetters_displayedErrorMessage() {
         HomePage homePage = new HomePage(driver);
