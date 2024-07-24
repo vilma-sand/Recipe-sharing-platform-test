@@ -1,9 +1,11 @@
 package org.Vilma;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
 
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -39,12 +41,46 @@ String inputCountryYouResideIn = "Angola";
        registrationPage.clickSubmitButton();
    }
 
+    public void registrationStepsForMobileVersion(
+            String inputFirstName, String inputLastName, String inputDisplayName, String  inputEmail, String inputPassword, String inputRepeatPassword, String inputDateOfBirth, String inputCountryYouResideIn) {
+
+        driver.manage().window().setSize(new Dimension(375, 667));
+        registrationPage = new RegistrationPage(driver);
 
 
-//public class RegistrationPageTest extends BasePageTest {
+            registrationPage = new RegistrationPage(driver);
+
+            registrationPage.enterFirstName(inputFirstName);
+            registrationPage.enterLastName(inputLastName);
+            registrationPage.enterDisplayName(inputDisplayName);
+            registrationPage.enterEmail(inputEmail);
+            registrationPage.enterPassword(inputPassword);
+            registrationPage.enterRepeatPassword(inputRepeatPassword);
+            registrationPage.enterDateOfBirth(inputDateOfBirth);
+            registrationPage.scrollDownToCountryYouResideIn();
+            registrationPage.clickPickYourGenderMale();
+            registrationPage.enterCountryYouResideIn(inputCountryYouResideIn);
+            registrationPage.clickIAcceptPrivacyPolicy();
+            registrationPage.scrollDownToButtonSubmit();
+            registrationPage.clickButtonSubmitAndWaitUrl();
+    }
+
+
 
 
     //HAPPY tests
+    @Test
+    public void mobileVersionRegistrationTest() {
+        registrationPage = new RegistrationPage(driver);
+        HomePage homePage = new HomePage(driver);
+
+        homePage.clickLinkRegisterAndWaitUrl();
+
+        registrationStepsForMobileVersion( inputFirstName, inputLastName, inputDisplayName, inputEmail, inputPassword, inputRepeatPassword, inputDateOfBirth, inputCountryYouResideIn);
+
+        assertTrue(driver.getPageSource().contains("You have registered successfully. You can now log in"), "Success message is not as expected");
+        assertEquals("http://localhost:5173/", driver.getCurrentUrl(), "Current URL is not as expected");
+    }
 
     @Test
     void whenVisitorEntersValidInputs_userLoggedInSuccessfully_displayedSuccessMessage() {
@@ -325,19 +361,7 @@ void whenVisitorEntersDifferentRepeatPassword_displayedErrorMessage() {
     assertTrue(driver.getPageSource().contains("Passwords do not match"), "Error messages is not as expected");
     assertEquals("http://localhost:5173/register", driver.getCurrentUrl(), "Current URL is not as expected");
 }
-//    @ParameterizedTest
-//    @CsvFileSource(resources = "/invalidPassword.csv")
-//    void whenVisitorEntersInvalidPassword_displayedErrorMessage(String input1, String input2) {
-//        registrationPage = new RegistrationPage(driver);
-//        HomePage homePage = new HomePage(driver);
-//
-//        homePage.clickLinkRegisterAndWaitUrl();
-//
-//        registrationSteps( inputFirstName, inputLastName, inputDisplayName, inputEmail, input1, input2, inputDateOfBirth, inputCountryYouResideIn);
-//
-//        assertTrue(driver.getPageSource().contains("Must contain at least one uppercase letter, one lowercase letter, one number, and any one of these special symbols: !@#$%^&*\"."), "Expected error message is not displayed for input password: " + input1);
-//        assertEquals("http://localhost:5173/register", driver.getCurrentUrl(), "Current URL is not as expected");
-//    }
+
     @Test
     void whenVisitorEntersDifferentPasswordInRepeatPassword_displayedErrorMessage() {
         registrationPage = new RegistrationPage(driver);
@@ -350,19 +374,19 @@ void whenVisitorEntersDifferentRepeatPassword_displayedErrorMessage() {
         assertTrue(driver.getPageSource().contains("Passwords do not match"), "Error messages is not as expected");
         assertEquals("http://localhost:5173/register", driver.getCurrentUrl(), "Current URL is not as expected");
     }
-//    @ParameterizedTest
-//    @CsvFileSource(resources = "/invalidDateOfBirth.csv")
-//    void whenVisitorEntersInvalidDateOfBirth_displayedErrorMessage(String input) {
-//        registrationPage = new RegistrationPage(driver);
-//        HomePage homePage = new HomePage(driver);
-//
-//        homePage.clickLinkRegisterAndWaitUrl();
-//
-//        registrationSteps( inputFirstName, inputLastName, inputDisplayName, inputEmail, inputPassword, inputRepeatPassword, input, inputCountryYouResideIn);
-//
-//        assertTrue(driver.getPageSource().contains("Cannot be older than the year 1900, or younger than 13 years old"), "Error messages is not as expected");
-//        assertEquals("http://localhost:5173/register", driver.getCurrentUrl(), "Current URL is not as expected");
-//    }
+    @ParameterizedTest
+    @CsvFileSource(resources = "/invalidDateOfBirth.csv")
+    void whenVisitorEntersInvalidDateOfBirth_displayedErrorMessage(String input) {
+        registrationPage = new RegistrationPage(driver);
+        HomePage homePage = new HomePage(driver);
+
+        homePage.clickLinkRegisterAndWaitUrl();
+
+        registrationSteps( inputFirstName, inputLastName, inputDisplayName, inputEmail, inputPassword, inputRepeatPassword, input, inputCountryYouResideIn);
+
+        assertTrue(driver.getPageSource().contains("Cannot be older than the year 1900, or younger than 13 years old"), "Error messages is not as expected");
+        assertEquals("http://localhost:5173/register", driver.getCurrentUrl(), "Current URL is not as expected");
+    }
 
     }
 

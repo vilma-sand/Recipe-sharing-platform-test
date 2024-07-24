@@ -91,7 +91,12 @@ public class RegistrationPage extends BasePage {
                 .scrollByAmount(0, deltaY)
                 .perform();
         }
-
+    public void scrollDownToCountryYouResideIn() {
+        int deltaY = countryYouResideIn.getRect().y;
+        new Actions(driver)
+                .scrollByAmount(0, deltaY)
+                .perform();
+    }
 
 
        // public String checkFirstName() {return firstName.getText();}
