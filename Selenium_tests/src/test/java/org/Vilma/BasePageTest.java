@@ -9,9 +9,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.time.Duration;
 
-public class BaseTest {
+public class BasePageTest {
     WebDriver driver;
 
     @BeforeEach
@@ -41,13 +40,14 @@ public class BaseTest {
 
         driver = new ChromeDriver();
         driver.manage().window().maximize();
+        //driver.manage().window().setSize(new Dimension(375, 667));
         driver.get("http://localhost:5173/");
     }
 
 
-    @AfterEach
-    void tearDown() {
-        driver.quit();
-    }
+//    @AfterEach
+//    void tearDown() {
+//        driver.quit();
+//    }
 
 }

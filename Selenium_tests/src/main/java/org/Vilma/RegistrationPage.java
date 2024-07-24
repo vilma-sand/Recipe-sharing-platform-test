@@ -79,9 +79,10 @@ public class RegistrationPage extends BasePage {
 
         // tik kai pasikeičia adresas
         public void clickButtonSubmitAndWaitUrl() {
-        this.submitButton.click();
-        Wait<WebDriver> wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-        wait.until(d -> driver.getCurrentUrl().equals("http://localhost:5173/"));
+            Wait<WebDriver> wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+            wait.until(d -> submitButton.isDisplayed());
+            this.submitButton.click();
+            wait.until(d -> driver.getCurrentUrl().equals("http://localhost:5173/"));
         }
 
         public void scrollDownToButtonSubmit() {
