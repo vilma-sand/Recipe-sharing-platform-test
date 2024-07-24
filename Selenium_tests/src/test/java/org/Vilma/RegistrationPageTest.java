@@ -70,7 +70,7 @@ String inputCountryYouResideIn = "Angola";
 
     //HAPPY tests
     @Test
-    public void mobileVersionRegistrationTest() {
+    void mobileVersionRegistrationTest() {
         registrationPage = new RegistrationPage(driver);
         HomePage homePage = new HomePage(driver);
 
@@ -129,43 +129,21 @@ String inputCountryYouResideIn = "Angola";
         assertTrue(driver.getPageSource().contains("You must check this in order to continue"), "Error message 'You must check this in order to continue' is not as expected");
         assertEquals("http://localhost:5173/register", driver.getCurrentUrl(), "Current URL is not as expected");
     }
-    @Test
-    void whenVisitorEntersFirstNameWithLithuanianLetters_displayedErrorMessage() {
+
+    @ParameterizedTest
+    @CsvFileSource(resources = "/invalidFirstName.csv")
+    void whenVisitorEntersInvalidFirstName_displayedErrorMessage(String input) {
         registrationPage = new RegistrationPage(driver);
         HomePage homePage = new HomePage(driver);
 
         homePage.clickLinkRegisterAndWaitUrl();
 
-        registrationSteps( "Tomaš", inputLastName, inputDisplayName, inputEmail, inputPassword, inputRepeatPassword, inputDateOfBirth, inputCountryYouResideIn);
+        registrationSteps( input, inputLastName, inputDisplayName, inputEmail, inputPassword, inputRepeatPassword, inputDateOfBirth, inputCountryYouResideIn);
 
         assertTrue(driver.getPageSource().contains("You can only enter English letters. First letter must be capital. At least 2 characters long."), "Error messages is not as expected");
         assertEquals("http://localhost:5173/register", driver.getCurrentUrl(), "Current URL is not as expected");
     }
-
-    @Test
-    void whenVisitorEntersFirstNameOneCharacterLong_displayedErrorMessage() {
-        registrationPage = new RegistrationPage(driver);
-        HomePage homePage = new HomePage(driver);
-
-        homePage.clickLinkRegisterAndWaitUrl();
-
-        registrationSteps( "T", inputLastName, inputDisplayName, inputEmail, inputPassword, inputRepeatPassword, inputDateOfBirth, inputCountryYouResideIn);
-
-        assertTrue(driver.getPageSource().contains("You can only enter English letters. First letter must be capital. At least 2 characters long."), "Error messages is not as expected");
-        assertEquals("http://localhost:5173/register", driver.getCurrentUrl(), "Current URL is not as expected");
-    }
-    @Test
-    void whenVisitorEntersFirstNameWithOnlyLowercases_displayedErrorMessage() {
-        registrationPage = new RegistrationPage(driver);
-        HomePage homePage = new HomePage(driver);
-
-        homePage.clickLinkRegisterAndWaitUrl();
-
-        registrationSteps( "tomukas", inputLastName, inputDisplayName, inputEmail, inputPassword, inputRepeatPassword, inputDateOfBirth, inputCountryYouResideIn);
-
-        assertTrue(driver.getPageSource().contains("You can only enter English letters. First letter must be capital. At least 2 characters long."), "Error messages is not as expected");
-        assertEquals("http://localhost:5173/register", driver.getCurrentUrl(), "Current URL is not as expected");
-    }
+    
     @Test
     void whenVisitorEntersLastNameWithOnlyLowercases_displayedErrorMessage() {
         registrationPage = new RegistrationPage(driver);
@@ -387,6 +365,7 @@ void whenVisitorEntersDifferentRepeatPassword_displayedErrorMessage() {
         assertTrue(driver.getPageSource().contains("Cannot be older than the year 1900, or younger than 13 years old"), "Error messages is not as expected");
         assertEquals("http://localhost:5173/register", driver.getCurrentUrl(), "Current URL is not as expected");
     }
+
 
     }
 
