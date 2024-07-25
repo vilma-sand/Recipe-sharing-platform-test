@@ -35,9 +35,9 @@ String inputCountryYouResideIn = "Angola";
        registrationPage.enterRepeatPassword(inputRepeatPassword);
        registrationPage.enterDateOfBirth(inputDateOfBirth);
        registrationPage.clickPickYourGenderMale();
+       registrationPage.scrollDownToButtonSubmit();
        registrationPage.enterCountryYouResideIn(inputCountryYouResideIn);
        registrationPage.clickIAcceptPrivacyPolicy();
-       registrationPage.scrollDownToButtonSubmit();
        registrationPage.clickSubmitButton();
    }
 
@@ -59,9 +59,9 @@ String inputCountryYouResideIn = "Angola";
             registrationPage.enterDateOfBirth(inputDateOfBirth);
             registrationPage.scrollDownToCountryYouResideIn();
             registrationPage.clickPickYourGenderMale();
+            registrationPage.scrollDownToButtonSubmit();
             registrationPage.enterCountryYouResideIn(inputCountryYouResideIn);
             registrationPage.clickIAcceptPrivacyPolicy();
-            registrationPage.scrollDownToButtonSubmit();
             registrationPage.clickButtonSubmitAndWaitUrl();
     }
 
@@ -104,10 +104,10 @@ String inputCountryYouResideIn = "Angola";
             String inputDateOfBirth = "07/06/2011";
             registrationPage.enterDateOfBirth(inputDateOfBirth);
             registrationPage.clickPickYourGenderMale();
+            registrationPage.scrollDownToButtonSubmit();
             String inputCountryYouResideIn = "Angola";
             registrationPage.enterCountryYouResideIn(inputCountryYouResideIn);
             registrationPage.clickIAcceptPrivacyPolicy();
-            registrationPage.scrollDownToButtonSubmit();
             registrationPage.clickButtonSubmitAndWaitUrl();
 
             assertTrue(driver.getPageSource().contains("You have registered successfully. You can now log in"), "Success message is not as expected");
@@ -143,7 +143,7 @@ String inputCountryYouResideIn = "Angola";
         assertTrue(driver.getPageSource().contains("You can only enter English letters. First letter must be capital. At least 2 characters long."), "Error messages is not as expected");
         assertEquals("http://localhost:5173/register", driver.getCurrentUrl(), "Current URL is not as expected");
     }
-    
+
     @Test
     void whenVisitorEntersLastNameWithOnlyLowercases_displayedErrorMessage() {
         registrationPage = new RegistrationPage(driver);
@@ -191,10 +191,10 @@ String inputCountryYouResideIn = "Angola";
         String inputDateOfBirth = "07/06/2011";
         registrationPage.enterDateOfBirth(inputDateOfBirth);
         registrationPage.clickPickYourGenderMale();
+        registrationPage.scrollDownToButtonSubmit();
         String inputCountryYouResideIn = "Angola";
         registrationPage.enterCountryYouResideIn(inputCountryYouResideIn);
         registrationPage.clickIAcceptPrivacyPolicy();
-        registrationPage.scrollDownToButtonSubmit();
         registrationPage.clickButtonSubmitAndWaitUrl();
 
        homePage.clickLinkRegisterAndWaitUrl();
@@ -214,10 +214,10 @@ String inputCountryYouResideIn = "Angola";
         String inputSecondDateOfBirth = "07/06/2011";
         registrationPage.enterDateOfBirth(inputSecondDateOfBirth);
         registrationPage.clickPickYourGenderMale();
+        registrationPage.scrollDownToButtonSubmit();
         String inputSecondCountryYouResideIn = "Angola";
         registrationPage.enterCountryYouResideIn(inputSecondCountryYouResideIn);
         registrationPage.clickIAcceptPrivacyPolicy();
-        registrationPage.scrollDownToButtonSubmit();
         registrationPage.clickSubmitButton();
 
         assertTrue(driver.getPageSource().contains("Already exists"), "Error messages is not as expected");
@@ -271,10 +271,10 @@ String inputCountryYouResideIn = "Angola";
         String inputDateOfBirth = "07/06/2011";
         registrationPage.enterDateOfBirth(inputDateOfBirth);
         registrationPage.clickPickYourGenderMale();
+        registrationPage.scrollDownToButtonSubmit();
         String inputCountryYouResideIn = "Angola";
         registrationPage.enterCountryYouResideIn(inputCountryYouResideIn);
         registrationPage.clickIAcceptPrivacyPolicy();
-        registrationPage.scrollDownToButtonSubmit();
         registrationPage.clickButtonSubmitAndWaitUrl();
 
         homePage.clickLinkRegisterAndWaitUrl();
@@ -294,35 +294,26 @@ String inputCountryYouResideIn = "Angola";
         String inputSecondDateOfBirth = "07/06/2011";
         registrationPage.enterDateOfBirth(inputSecondDateOfBirth);
         registrationPage.clickPickYourGenderMale();
+        registrationPage.scrollDownToButtonSubmit();
         String inputSecondCountryYouResideIn = "Angola";
         registrationPage.enterCountryYouResideIn(inputSecondCountryYouResideIn);
         registrationPage.clickIAcceptPrivacyPolicy();
-        registrationPage.scrollDownToButtonSubmit();
         registrationPage.clickSubmitButton();
 
         assertTrue(driver.getPageSource().contains("Already exists"), "Error messages is not as expected");
         assertEquals("http://localhost:5173/register", driver.getCurrentUrl(), "Current URL is not as expected");
     }
-    @Test
-    void whenVisitorEntersEmailWithCapitalLetters_displayedErrorMessage() {
+   
+
+    @ParameterizedTest
+    @CsvFileSource(resources = "/invalidEmail.csv")
+    void whenVisitorEntersInvalidEmail_displayedErrorMessage(String input) {
         registrationPage = new RegistrationPage(driver);
         HomePage homePage = new HomePage(driver);
 
         homePage.clickLinkRegisterAndWaitUrl();
 
-        registrationSteps( inputFirstName, inputLastName, inputDisplayName, "TOMAS23@gmail.com", inputPassword, inputRepeatPassword, inputDateOfBirth, inputCountryYouResideIn);
-
-        assertTrue(driver.getPageSource().contains("May only contain English letters, all lowercase. Can contain numbers, and these symbols ._-"), "Error messages is not as expected");
-        assertEquals("http://localhost:5173/register", driver.getCurrentUrl(), "Current URL is not as expected");
-    }
-    @Test
-    void whenVisitorEntersEmailWithLithuanianLetters_displayedErrorMessage() {
-        registrationPage = new RegistrationPage(driver);
-        HomePage homePage = new HomePage(driver);
-
-        homePage.clickLinkRegisterAndWaitUrl();
-
-        registrationSteps( inputFirstName, inputLastName, inputDisplayName, "jonukaš@gmail.com", inputPassword, inputRepeatPassword, inputDateOfBirth, inputCountryYouResideIn);
+        registrationSteps( inputFirstName, inputLastName, inputDisplayName, input, inputPassword, inputRepeatPassword, inputDateOfBirth, inputCountryYouResideIn);
 
         assertTrue(driver.getPageSource().contains("May only contain English letters, all lowercase. Can contain numbers, and these symbols ._-"), "Error messages is not as expected");
         assertEquals("http://localhost:5173/register", driver.getCurrentUrl(), "Current URL is not as expected");
@@ -359,6 +350,27 @@ void whenVisitorEntersDifferentRepeatPassword_displayedErrorMessage() {
         HomePage homePage = new HomePage(driver);
 
         homePage.clickLinkRegisterAndWaitUrl();
+//
+//        String inputFirstName = "Tomukas";
+//        registrationPage.enterFirstName(inputFirstName);
+//        String inputLastName = "Tomukaitis";
+//        registrationPage.enterLastName(inputLastName);
+//        String inputDisplayName = "Tomasas";
+//        registrationPage.enterDisplayName(inputDisplayName);
+//        String inputEmail = "tomukas23@gmail.com";
+//        registrationPage.enterEmail(inputEmail);
+//        String inputPassword = "Tomasa23*";
+//        registrationPage.enterPassword(inputPassword);
+//        String inputRepeatPassword = "Tomasa23*";
+//        registrationPage.enterRepeatPassword(inputRepeatPassword);
+//        String inputDateOfBirth = input;
+//        registrationPage.enterDateOfBirth(inputDateOfBirth);
+//        registrationPage.clickPickYourGenderMale();
+//        registrationPage.scrollDownToButtonSubmit();
+//        String inputCountryYouResideIn = "Angola";
+//        registrationPage.enterCountryYouResideIn(inputCountryYouResideIn);
+//        registrationPage.clickIAcceptPrivacyPolicy();
+//        registrationPage.clickSubmitButton();
 
         registrationSteps( inputFirstName, inputLastName, inputDisplayName, inputEmail, inputPassword, inputRepeatPassword, input, inputCountryYouResideIn);
 
