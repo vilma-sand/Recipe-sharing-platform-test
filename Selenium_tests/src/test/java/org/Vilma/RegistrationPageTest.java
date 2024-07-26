@@ -81,38 +81,39 @@ String inputCountryYouResideIn = "Angola";
         assertTrue(driver.getPageSource().contains("You have registered successfully. You can now log in"), "Success message is not as expected");
         assertEquals("http://localhost:5173/", driver.getCurrentUrl(), "Current URL is not as expected");
     }
+    @ParameterizedTest
+    @CsvFileSource(resources = "/validEmail.csv")
+    void whenVisitorEntersValidEmail_userLoggedInSuccessfully_displayedSuccessMessage(String input) {
+        registrationPage = new RegistrationPage(driver);
+        HomePage homePage = new HomePage(driver);
 
-    @Test
-    void whenVisitorEntersValidInputs_userLoggedInSuccessfully_displayedSuccessMessage() {
-            HomePage homePage = new HomePage(driver);
-            RegistrationPage registrationPage = new RegistrationPage(driver);
+        homePage.clickLinkRegisterAndWaitUrl();
 
-            homePage.clickLinkRegisterAndWaitUrl();
+        String inputFirstName = "Tomas";
+        registrationPage.enterFirstName(inputFirstName);
+        String inputLastName = "Tomasaitis";
+        registrationPage.enterLastName(inputLastName);
+        String inputDisplayName = "Tomasas";
+        registrationPage.enterDisplayName(inputDisplayName);
+        String inputEmail = input;
+        registrationPage.enterEmail(inputEmail);
+        String inputPassword = "Tomasa23*";
+        registrationPage.enterPassword(inputPassword);
+        String inputRepeatPassword = "Tomasa23*";
+        registrationPage.enterRepeatPassword(inputRepeatPassword);
+        String inputDateOfBirth = "07/06/2011";
+        registrationPage.enterDateOfBirth(inputDateOfBirth);
+        registrationPage.clickPickYourGenderMale();
+        registrationPage.scrollDownToButtonSubmit();
+        String inputCountryYouResideIn = "Angola";
+        registrationPage.enterCountryYouResideIn(inputCountryYouResideIn);
+        registrationPage.clickIAcceptPrivacyPolicy();
+        registrationPage.clickButtonSubmitAndWaitUrl();
 
-            String inputFirstName = "Tomas";
-            registrationPage.enterFirstName(inputFirstName);
-            String inputLastName = "Tomasaitis";
-            registrationPage.enterLastName(inputLastName);
-            String inputDisplayName = "Tomasas";
-            registrationPage.enterDisplayName(inputDisplayName);
-            String inputEmail = "tomukas23@gmail.com";
-            registrationPage.enterEmail(inputEmail);
-            String inputPassword = "Tomasa23*";
-            registrationPage.enterPassword(inputPassword);
-            String inputRepeatPassword = "Tomasa23*";
-            registrationPage.enterRepeatPassword(inputRepeatPassword);
-            String inputDateOfBirth = "07/06/2011";
-            registrationPage.enterDateOfBirth(inputDateOfBirth);
-            registrationPage.clickPickYourGenderMale();
-            registrationPage.scrollDownToButtonSubmit();
-            String inputCountryYouResideIn = "Angola";
-            registrationPage.enterCountryYouResideIn(inputCountryYouResideIn);
-            registrationPage.clickIAcceptPrivacyPolicy();
-            registrationPage.clickButtonSubmitAndWaitUrl();
-
-            assertTrue(driver.getPageSource().contains("You have registered successfully. You can now log in"), "Success message is not as expected");
-            assertEquals("http://localhost:5173/", driver.getCurrentUrl(), "Current URL is not as expected");
-        }
+        assertTrue(driver.getPageSource().contains("You have registered successfully. You can now log in"), "Success message is not as expected");
+        assertEquals("http://localhost:5173/", driver.getCurrentUrl(), "Current URL is not as expected");
+    }
+          
 
     //UNHAPPY tests
 
