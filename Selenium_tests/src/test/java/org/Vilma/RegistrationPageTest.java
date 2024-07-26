@@ -303,7 +303,7 @@ String inputCountryYouResideIn = "Angola";
         assertTrue(driver.getPageSource().contains("Already exists"), "Error messages is not as expected");
         assertEquals("http://localhost:5173/register", driver.getCurrentUrl(), "Current URL is not as expected");
     }
-   
+
 
     @ParameterizedTest
     @CsvFileSource(resources = "/invalidEmail.csv")
@@ -350,29 +350,27 @@ void whenVisitorEntersDifferentRepeatPassword_displayedErrorMessage() {
         HomePage homePage = new HomePage(driver);
 
         homePage.clickLinkRegisterAndWaitUrl();
-//
-//        String inputFirstName = "Tomukas";
-//        registrationPage.enterFirstName(inputFirstName);
-//        String inputLastName = "Tomukaitis";
-//        registrationPage.enterLastName(inputLastName);
-//        String inputDisplayName = "Tomasas";
-//        registrationPage.enterDisplayName(inputDisplayName);
-//        String inputEmail = "tomukas23@gmail.com";
-//        registrationPage.enterEmail(inputEmail);
-//        String inputPassword = "Tomasa23*";
-//        registrationPage.enterPassword(inputPassword);
-//        String inputRepeatPassword = "Tomasa23*";
-//        registrationPage.enterRepeatPassword(inputRepeatPassword);
-//        String inputDateOfBirth = input;
-//        registrationPage.enterDateOfBirth(inputDateOfBirth);
-//        registrationPage.clickPickYourGenderMale();
-//        registrationPage.scrollDownToButtonSubmit();
-//        String inputCountryYouResideIn = "Angola";
-//        registrationPage.enterCountryYouResideIn(inputCountryYouResideIn);
-//        registrationPage.clickIAcceptPrivacyPolicy();
-//        registrationPage.clickSubmitButton();
 
-        registrationSteps( inputFirstName, inputLastName, inputDisplayName, inputEmail, inputPassword, inputRepeatPassword, input, inputCountryYouResideIn);
+        String inputFirstName = "Tomukas";
+        registrationPage.enterFirstName(inputFirstName);
+        String inputLastName = "Tomukaitis";
+        registrationPage.enterLastName(inputLastName);
+        String inputDisplayName = "Tomasas";
+        registrationPage.enterDisplayName(inputDisplayName);
+        String inputEmail = "tomukas23@gmail.com";
+        registrationPage.enterEmail(inputEmail);
+        String inputPassword = "Tomasa23*";
+        registrationPage.enterPassword(inputPassword);
+        String inputRepeatPassword = "Tomasa23*";
+        registrationPage.enterRepeatPassword(inputRepeatPassword);
+        String inputDateOfBirth = input;
+        registrationPage.enterDateOfBirth(inputDateOfBirth);
+        registrationPage.clickPickYourGenderMale();
+        registrationPage.scrollDownToButtonSubmit();
+        String inputCountryYouResideIn = "Angola";
+        registrationPage.enterCountryYouResideIn(inputCountryYouResideIn);
+        registrationPage.clickIAcceptPrivacyPolicy();
+        registrationPage.clickButtonSubmitAndWaitForElement();
 
         assertTrue(driver.getPageSource().contains("Cannot be older than the year 1900, or younger than 13 years old"), "Error messages is not as expected");
         assertEquals("http://localhost:5173/register", driver.getCurrentUrl(), "Current URL is not as expected");

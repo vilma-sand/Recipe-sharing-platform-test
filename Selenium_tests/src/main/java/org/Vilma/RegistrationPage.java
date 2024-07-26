@@ -1,10 +1,12 @@
 package org.Vilma;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -91,6 +93,19 @@ public class RegistrationPage extends BasePage {
                 .scrollByAmount(0, deltaY)
                 .perform();
         }
+
+    public void clickButtonSubmitAndWaitForElement() {
+        Wait<WebDriver> wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        wait.until(d -> submitButton.isDisplayed());
+        this.submitButton.click();
+
+        // Define the condition to wait for after the click
+        // Use By.xpath to specify the XPath expression directly
+        By postSubmitElement = By.xpath("//div[@class = 'text-danger']");
+        wait.until(ExpectedConditions.visibilityOfElementLocated(postSubmitElement));
+    }
+
+
     public void scrollDownToCountryYouResideIn() {
         int deltaY = countryYouResideIn.getRect().y;
         new Actions(driver)
